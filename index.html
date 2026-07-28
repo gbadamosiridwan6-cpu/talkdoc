@@ -1842,8 +1842,7 @@ if(localStorage.getItem('td_ver')!=='v3'){localStorage.removeItem('td_d');localS
   // This local list only bootstraps names/emails for a browser with no Supabase
   // connection yet; it can never be used to log in with a real password.
   const defaults=[
-    {id:'dr1',name:'Dr. Gbadamosi Ridwan',email:'talkdoc26@gmail.com',specialty:'General Physician',status:'active',qualification:'MBBS'},
-    {id:'dr2',name:'Dr. Ajayi D.',email:'ajayi@talkdoc.ng',specialty:'General Physician',status:'active',qualification:'MB;BS'}
+    {id:'dr1',name:'Dr. Gbadamosi Ridwan',email:'talkdoc26@gmail.com',specialty:'General Physician',status:'active',qualification:'MBBS'}
   ];
   defaults.forEach(function(d){
     const existing=S.doctors.find(function(x){return x.id===d.id;});
@@ -2330,7 +2329,7 @@ function setupOTP(){
 }
 
 // PAYMENT — Paystack
-const PAYSTACK_KEY = 'pk_live_0a9af3c69f31864db76b2ddc1d436a0df26f4e2f';
+const PAYSTACK_KEY = 'pk_test_39d58895525173737c7347e2e6f4a21242e726d0'; // TEST MODE — switch back to pk_live_... before going live again
 // Auto-debit / recurring billing: create this Plan once in your Paystack
 // Dashboard → Payments → Plans (Monthly, ₦10,000/monthly), then paste the
 // plan_code Paystack gives you (looks like "PLN_xxxxxxxxxx") here.
@@ -2457,11 +2456,12 @@ if(idx>=0){S.users[idx].plan=curPlan;S.users[idx].planStatus='active';}
   }
   sv();
   if(curPlan==='single'){
-    showSuccess('Payment Confirmed! 🎉','Reference: '+response.reference+'. You now have 1 consultation credit — start your consultation now!','🎉');
+    showSuccess('Payment Confirmed! 🎉','Reference: '+response.reference+'. You now have 1 consultation credit — taking you to start your consultation now.','🎉');
   }else{
-    showSuccess('Subscription Activated! 🎉','Payment confirmed. Reference: '+response.reference+'. Your Monthly Plan is now active. Start a consultation now!','🎉');
+    showSuccess('Subscription Activated! 🎉','Payment confirmed. Reference: '+response.reference+'. Your Monthly Plan is now active — taking you to start a consultation now.','🎉');
   }
   lPH();
+  setTimeout(()=>{closeModal('success');showDashSection('patient','consult');},2200);
 }
 
 // PATIENT
