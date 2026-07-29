@@ -1266,7 +1266,8 @@ html{transition:background-color .35s ease;}
 <div class="dash-section" id="patient-messages"><div class="dash-header"><h1>Messages</h1></div><div class="chat-layout"><div class="chat-list"><div class="chat-list-header">Conversations</div><div id="patientChatList"></div></div><div class="chat-window">
 <div class="chat-window-header"><button class="chat-back-btn" onclick="closePChatMobile()" aria-label="Back to conversations"><svg class="ico"><use href="#icon-back"/></svg></button><div class="doctor-avatar" style="width:36px;height:36px;font-size:.85rem">GR</div><div style="flex:1"><div style="font-weight:700;font-size:14px" id="chatDrName">Dr. Gbadamosi</div><div style="font-size:12px;color:var(--text2)"><span class="online-dot"></span> Online</div></div><button class="btn btn-outline btn-icon" title="Voice call" onclick="startCall('audio')"><svg class="ico"><use href="#icon-phone"/></svg></button><button class="btn btn-outline btn-icon" title="Video call" onclick="startCall('video')"><svg class="ico"><use href="#icon-video"/></svg></button></div>
 <div class="chat-messages" id="patientChatMessages"><div class="msg received">Hello! How can I help you today?<div class="time">Now</div></div></div>
-<div class="chat-input"><input type="file" id="patientImgInput" accept="image/*" style="display:none" onchange="sendPatientImage(this.files[0])"><button class="btn btn-outline btn-icon" title="Send a photo" onclick="document.getElementById('patientImgInput').click()"><svg class="ico"><use href="#icon-camera"/></svg></button><button class="btn btn-outline btn-icon" id="patientMicBtn" title="Record a voice note" onclick="toggleVoiceRecording('patient')"><svg class="ico"><use href="#icon-mic"/></svg></button><input type="text" id="patientMsgInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendPatientMsg()"><div class="voice-rec-bar hidden" id="patientVoiceBar"><span class="rec-dot"></span><span id="patientVoiceTimer">0:00</span><span class="rec-label" style="color:var(--text2)">Recording…</span><span style="flex:1"></span><button class="btn btn-sm btn-gray" onclick="cancelVoiceRecording('patient')">Cancel</button><button class="btn btn-sm btn-primary" onclick="stopVoiceRecording('patient',true)">Send</button></div><button class="btn btn-primary" id="patientSendBtn" onclick="sendPatientMsg()">Send</button></div></div></div>
+<div id="patientChatClosedBanner" class="hidden" style="padding:10px 16px;background:#fef3c7;color:#92400e;font-size:13px;text-align:center;font-weight:600">🔒 This consultation has ended — subscribe monthly or pay per consultation to message this doctor again.</div>
+<div class="chat-input" id="patientChatInputBar"><input type="file" id="patientImgInput" accept="image/*" style="display:none" onchange="sendPatientImage(this.files[0])"><button class="btn btn-outline btn-icon" title="Send a photo" onclick="document.getElementById('patientImgInput').click()"><svg class="ico"><use href="#icon-camera"/></svg></button><button class="btn btn-outline btn-icon" id="patientMicBtn" title="Record a voice note" onclick="toggleVoiceRecording('patient')"><svg class="ico"><use href="#icon-mic"/></svg></button><input type="text" id="patientMsgInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendPatientMsg()"><div class="voice-rec-bar hidden" id="patientVoiceBar"><span class="rec-dot"></span><span id="patientVoiceTimer">0:00</span><span class="rec-label" style="color:var(--text2)">Recording…</span><span style="flex:1"></span><button class="btn btn-sm btn-gray" onclick="cancelVoiceRecording('patient')">Cancel</button><button class="btn btn-sm btn-primary" onclick="stopVoiceRecording('patient',true)">Send</button></div><button class="btn btn-primary" id="patientSendBtn" onclick="sendPatientMsg()">Send</button></div></div></div>
 </div>
 <div class="dash-section" id="patient-community">
 <div class="dash-header"><h1>Community</h1><p>Free, anonymous support groups — join whenever you're ready. Nobody sees your real name.</p></div>
@@ -2895,14 +2896,6 @@ async function lPMsg(){
   const u=S.currentUser;
   const chatWindow=document.querySelector('#patient-messages .chat-window');
   const chatInput=document.querySelector('#patient-messages .chat-input');
-  const hasSub=await hasActiveSubscription(u.id);
-  if(!hasSub){
-    // Show locked state
-    const el=document.getElementById('patientChatList');
-    el.innerHTML='<div style="padding:18px;font-size:14px;color:var(--text2);text-align:center"><div style="margin-bottom:8px;color:var(--text2)"><svg class="ico" style="width:2rem;height:2rem;stroke-width:1.5"><use href="#icon-lock"/></svg></div><div style="font-weight:700;margin-bottom:6px">Subscription Required</div><div style="font-size:13px">Subscribe to a plan to access your messages.</div><button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="showDashSection(\'patient\',\'subscription\')">Subscribe Now →</button></div>';
-    if(chatWindow) chatWindow.style.display='none';
-    return;
-  }
   if(chatWindow) chatWindow.style.display='flex';
   const el=document.getElementById('patientChatList');
   await loadMessagesForUser('patient',u.id);
@@ -2958,7 +2951,7 @@ async function loadMessagesForUser(role,userId){
   }catch(e){ console.log('Could not load messages from Supabase:',e); }
 }
 let aPThread=null;
-function openPChat(tid,name,el,reveal){
+async function openPChat(tid,name,el,reveal){
   if(reveal===undefined) reveal=true;
   aPThread=tid;
   markThreadRead(tid);
@@ -2975,6 +2968,17 @@ function openPChat(tid,name,el,reveal){
     const layout=document.querySelector('#patient-messages .chat-layout');
     if(layout) layout.classList.add('chat-open');
   }
+  // Visually reflect whether this specific conversation can still accept new
+  // messages — the history above always stays visible either way.
+  const canSend=await canSendInThread(tid);
+  const banner=document.getElementById('patientChatClosedBanner');
+  const msgInput=document.getElementById('patientMsgInput');
+  const sendBtn=document.getElementById('patientSendBtn');
+  const micBtn=document.getElementById('patientMicBtn');
+  if(banner) banner.classList.toggle('hidden',canSend);
+  if(msgInput) msgInput.disabled=!canSend;
+  if(sendBtn) sendBtn.disabled=!canSend;
+  if(micBtn) micBtn.disabled=!canSend;
 }
 function closePChatMobile(){
   const layout=document.querySelector('#patient-messages .chat-layout');
@@ -3042,13 +3046,17 @@ async function sendPatientImage(file){
   if(!file) return;
   if(!file.type.startsWith('image/')) return alert('Please choose an image file.');
   if(file.size > 8*1024*1024) return alert('Image is too large — please choose one under 8MB.');
-  const hasSub=await hasActiveSubscription(S.currentUser.id);
-  if(!hasSub){showDashSection('patient','subscription');return;}
   if(!aPThread){
     await loadMessagesForUser('patient',S.currentUser.id);
     const th=Object.keys(S.messages).filter(k=>k.startsWith(S.currentUser.id+'_'));
     if(th.length) aPThread=th[th.length-1];
     else { document.getElementById('patientChatMessages').innerHTML='<div style="text-align:center;padding:30px;color:var(--text2);font-size:14px">Please select a conversation from the left first.</div>'; return; }
+  }
+  const canSend=await canSendInThread(aPThread);
+  if(!canSend){
+    showSuccess('Consultation Completed','This consultation has ended. Subscribe monthly or pay per consultation to start a new one with this doctor.','🔒');
+    setTimeout(()=>{closeModal('success');showDashSection('patient','subscription');},2200);
+    return;
   }
   if(!sbReady()){ alert('Photo sharing needs Supabase to be configured.'); return; }
   try{
@@ -3073,9 +3081,6 @@ async function sendPatientMsg(){
   const inp=document.getElementById('patientMsgInput');
   const t=inp.value.trim();
   if(!t) return;
-  // Check subscription
-  const hasSub=await hasActiveSubscription(S.currentUser.id);
-  if(!hasSub){showDashSection('patient','subscription');return;}
   if(!aPThread){
     // No thread open yet — fall back to the most recent conversation instead of failing silently
     await loadMessagesForUser('patient',S.currentUser.id);
@@ -3086,6 +3091,12 @@ async function sendPatientMsg(){
       document.getElementById('patientChatMessages').innerHTML='<div style="text-align:center;padding:30px;color:var(--text2);font-size:14px">Please select a conversation from the left first.</div>';
       return;
     }
+  }
+  const canSend=await canSendInThread(aPThread);
+  if(!canSend){
+    showSuccess('Consultation Completed','This consultation has ended. Subscribe monthly or pay per consultation to start a new one with this doctor.','🔒');
+    setTimeout(()=>{closeModal('success');showDashSection('patient','subscription');},2200);
+    return;
   }
   const newMsg={from:'patient',name:S.currentUser.name,text:t,time:new Date().toISOString()};
   if(!S.messages[aPThread]) S.messages[aPThread]=[];
@@ -3181,16 +3192,20 @@ function stopVoiceRecording(role,send){
 async function sendVoiceNote(role,blob,mimeType){
   if(!sbReady()){ alert('Voice notes need Supabase to be configured.'); return; }
   const isPatient=role==='patient';
-  if(isPatient){
-    const hasSub=await hasActiveSubscription(S.currentUser.id);
-    if(!hasSub){ showDashSection('patient','subscription'); return; }
-  }
   let thread=isPatient?aPThread:aDThread;
   if(!thread){
     await loadMessagesForUser(role,S.currentUser.id);
     const th=Object.keys(S.messages).filter(k=>isPatient?k.startsWith(S.currentUser.id+'_'):k.endsWith('_'+S.currentUser.id));
     if(th.length){ thread=th[th.length-1]; if(isPatient) aPThread=thread; else aDThread=thread; }
     else{ alert('Please select a conversation first.'); return; }
+  }
+  if(isPatient){
+    const canSend=await canSendInThread(thread);
+    if(!canSend){
+      showSuccess('Consultation Completed','This consultation has ended. Subscribe monthly or pay per consultation to start a new one with this doctor.','🔒');
+      setTimeout(()=>{closeModal('success');showDashSection('patient','subscription');},2200);
+      return;
+    }
   }
   try{
     const ext = mimeType.includes('ogg') ? 'ogg' : (mimeType.includes('mp4')||mimeType.includes('m4a')) ? 'm4a' : 'webm';
@@ -5258,22 +5273,47 @@ async function getActiveMonthlyPayment(userId){
   return expiry>new Date() ? row : null;
 }
 
+// Whether a patient can SEND a new message in a specific chat thread (as
+// opposed to hasActiveSubscription, which used to gate viewing the whole
+// Messages section — viewing is now always allowed, see checkSubThenMessages).
+// Monthly subscribers can always send (that's what unlimited means). Everyone
+// else can only send while the consultation behind this specific thread is
+// still open (pending/active) — once a doctor marks it completed via Add
+// Notes, sending in that thread stops until they pay for a new consultation,
+// while the past messages themselves remain fully visible forever.
+async function canSendInThread(threadId){
+  if(!threadId) return false;
+  if(await getActiveMonthlyPayment(S.currentUser?.id)) return true;
+  const us=threadId.indexOf('_');
+  const patientId=threadId.slice(0,us), doctorId=threadId.slice(us+1);
+  if(sbReady()){
+    try{
+      const {data,error}=await sb.from('consultations').select('id').eq('patient_id',patientId).eq('doctor_id',doctorId).in('status',['pending','active']).limit(1);
+      if(!error) return !!(data && data.length);
+    }catch(e){ /* fall through to local cache */ }
+  }
+  return !!S.consultations.find(c=>c.patientId===patientId&&c.doctorId===doctorId&&['pending','active'].includes(c.status));
+}
+
 async function hasActiveSubscription(userId){
   if(!userId) return false;
   if(await getActiveMonthlyPayment(userId)) return true;
   const trial=await getTrialInfo(userId);
   if(trial&&trial.onTrial) return true;
-  // Anyone who has ever paid anything (single credit included) keeps general
-  // access like messaging, even after that specific credit/period is used up —
-  // this only governs ongoing access, not starting a NEW consultation (that's
-  // canStartNewConsultation's job, which is strict about credits/expiry).
+  // Otherwise, messaging only stays open while there's a consultation still
+  // IN PROGRESS (pending/active) — once a doctor marks every consultation a
+  // patient has "completed" (via Add Notes), this closes again until they buy
+  // a new credit or plan, which lets them start a fresh consultation.
+  // Previously this checked "has this person EVER had any approved payment",
+  // which meant a single ₦5,000 consult from months ago granted permanent,
+  // unlimited free messaging forever — that loophole is what this replaces.
   if(sbReady()){
     try{
-      const {data,error}=await sb.from('payments').select('id').eq('user_id',userId).eq('status','approved').limit(1);
+      const {data,error}=await sb.from('consultations').select('id').eq('patient_id',userId).in('status',['pending','active']).limit(1);
       if(!error) return !!(data && data.length);
     }catch(e){ /* fall through to local cache */ }
   }
-  return !!S.payments.find(p=>p.userId===userId&&p.status==='approved');
+  return !!S.consultations.find(c=>c.patientId===userId && ['pending','active'].includes(c.status));
 }
 
 // Returns {onTrial, daysLeft, trialEnd} for the current patient, used to show
@@ -5342,13 +5382,11 @@ async function canStartNewConsultation(userId){
   return {allowed:false, reason: count>=1?'trial_used':'none'};
 }
 
-async function checkSubThenMessages(){
-  const hasSub=await hasActiveSubscription(S.currentUser?.id);
-  if(!hasSub){
-    showSuccess('Subscription Required','Please subscribe to a plan to access the messaging system.','🔒');
-    setTimeout(()=>{closeModal('success');showDashSection('patient','subscription');},2000);
-    return;
-  }
+function checkSubThenMessages(){
+  // Viewing past conversations is always allowed, regardless of subscription
+  // status — a patient's medical history shouldn't disappear just because
+  // they haven't paid recently. Sending NEW messages is what's actually
+  // gated, per-thread, in canSendInThread() (see sendPatientMsg etc.)
   showDashSection('patient','messages');
 }
 
