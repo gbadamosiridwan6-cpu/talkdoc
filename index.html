@@ -1431,6 +1431,8 @@ html{transition:background-color .35s ease;}
 <input type="file" id="adminDoctorPhotoInput" accept="image/*" class="hidden" onchange="adminChangeDoctorPhoto(event)">
 </div>
 <div class="dash-section" id="admin-payments"><div class="dash-header"><h1>Payment Requests</h1></div><div class="card"><table class="table"><thead><tr><th>Patient</th><th>Plan</th><th>Amount</th><th>Date</th><th>Payer</th><th>Action</th></tr></thead><tbody id="adminPaymentsTable"><tr><td colspan="6" style="color:var(--text2);text-align:center;padding:20px">No payment requests</td></tr></tbody></table></div>
+<div class="card"><div class="card-title">People Who Have Paid Before <span style="font-weight:400;font-size:13px;color:var(--text2)">— every patient with at least one approved payment, most recent plan shown</span></div><table class="table"><thead><tr><th>Patient</th><th>Email</th><th>Latest Plan</th><th>Status</th><th>Last Paid</th></tr></thead><tbody id="adminAllPayersTable"><tr><td colspan="5" style="color:var(--text2);text-align:center;padding:20px">Loading…</td></tr></tbody></table></div>
+<div class="card"><div class="card-title">Didn't Renew <span style="font-weight:400;font-size:13px;color:var(--text2)">— Monthly Plan subscribers whose plan lapsed with no newer payment</span></div><table class="table"><thead><tr><th>Patient</th><th>Email</th><th>Auto-Debit</th><th>Expired On</th></tr></thead><tbody id="adminLapsedTable"><tr><td colspan="4" style="color:var(--text2);text-align:center;padding:20px">Loading…</td></tr></tbody></table></div>
 </div>
 <div class="dash-section" id="admin-doctorApps">
 <div class="dash-header" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between">
@@ -2329,7 +2331,7 @@ function setupOTP(){
 }
 
 // PAYMENT — Paystack
-const PAYSTACK_KEY = 'pk_test_39d58895525173737c7347e2e6f4a21242e726d0'; // TEST MODE — switch back to pk_live_... before going live again
+const PAYSTACK_KEY = 'pk_live_0a9af3c69f31864db76b2ddc1d436a0df26f4e2f';
 // Auto-debit / recurring billing: create this Plan once in your Paystack
 // Dashboard → Payments → Plans (Monthly, ₦10,000/monthly), then paste the
 // plan_code Paystack gives you (looks like "PLN_xxxxxxxxxx") here.
@@ -2338,7 +2340,7 @@ const PAYSTACK_KEY = 'pk_test_39d58895525173737c7347e2e6f4a21242e726d0'; // TEST
 // Pay-Per-Consultation ('single') deliberately has NO entry here — it must never
 // auto-recur, it's a one-time ₦5,000 purchase.
 const PAYSTACK_PLAN_CODES = {
-  monthly: 'PLN_REPLACE_WITH_MONTHLY_PLAN_CODE'
+  monthly: 'PLN_lvme07fu5eewr17'
 };
 let curPlan = 'monthly';
 
@@ -2485,12 +2487,12 @@ async function loadPaymentsForPatient(patientId){
   }catch(e){ console.log('Could not load payments from Supabase:',e); }
 }
 async function lPH(){const u=S.currentUser;if(!u)return;await loadConsultationsForPatient(u.id);await loadPaymentsForPatient(u.id);const c=S.consultations.filter(x=>x.patientId===u.id);document.getElementById('dashConsultCount').textContent=c.length;
-const unlimitedPlans=['monthly','personal','family']; // personal/family = legacy, kept for pre-existing subscribers
-const p=S.payments.filter(x=>x.userId===u.id&&x.status==='approved'&&unlimitedPlans.includes(x.plan)).pop();
+const p=await getActiveMonthlyPayment(u.id);
 if(p){
   document.getElementById('dashPlanName').textContent='Monthly Plan';
   document.getElementById('dashPlanStatus').innerHTML='<span class="badge badge-success">ACTIVE</span>';
-  const e=new Date(p.approvedDate);e.setMonth(e.getMonth()+1);document.getElementById('dashExpiry').textContent=e.toLocaleDateString('en-NG');
+  const expiryDate=p.next_payment_date?new Date(p.next_payment_date):(()=>{const e=new Date(p.created_at);e.setMonth(e.getMonth()+1);return e;})();
+  document.getElementById('dashExpiry').textContent=expiryDate.toLocaleDateString('en-NG');
 }else{
   const trial=await getTrialInfo(u.id);
   const credits=await getConsultCredits(u.id);
@@ -2597,17 +2599,21 @@ async function lSub(){
   const u=S.currentUser;
   await loadPaymentsForPatient(u.id);
   const unlimitedPlans=['monthly','personal','family']; // personal/family = legacy, kept for pre-existing subscribers
-  const approved=S.payments.filter(x=>x.userId===u.id&&x.status==='approved'&&unlimitedPlans.includes(x.plan)).pop();
+  const approved=await getActiveMonthlyPayment(u.id);
   const pending=S.payments.filter(x=>x.userId===u.id&&x.status==='pending'&&unlimitedPlans.includes(x.plan)).pop();
   const credits=await getConsultCredits(u.id);
   const el=document.getElementById('subscriptionDetails');
 
   if(approved){
-    const renewsText=approved.autoDebit
-      ?'Auto-renews on '+(approved.nextPaymentDate?new Date(approved.nextPaymentDate).toLocaleDateString('en-NG'):'—')
-      :'Manual renewal — resubscribe before it expires';
+    const autoDebitOn=!!approved.auto_debit;
+    const nextDate=approved.next_payment_date?new Date(approved.next_payment_date):null;
+    const renewsText=autoDebitOn
+      ?'Auto-renews on '+(nextDate?nextDate.toLocaleDateString('en-NG'):'—')
+      :'Expires '+(nextDate?nextDate.toLocaleDateString('en-NG'):'—')+' — resubscribe before then to keep access';
     el.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><div style="font-size:1.1rem;font-weight:700">Monthly Plan</div><div style="font-size:13px;color:var(--text2)">'+renewsText+'</div></div><span class="badge badge-success">ACTIVE</span></div>'
-      +(approved.autoDebit?'<div class="alert alert-info" style="margin-top:14px">💳 Auto-debit is on — we\'ll automatically charge your card monthly so you never lose access.</div>':'<div class="alert alert-info" style="margin-top:14px">Auto-debit is off for this plan. Subscribe again next month to renew, or contact us to enable auto-debit.</div>');
+      +(autoDebitOn
+        ?'<div class="alert alert-info" style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><span>💳 Auto-debit is on — we\'ll automatically charge your card monthly so you never lose access.</span><button class="btn btn-sm btn-outline" onclick="disableAutoDebit()">Turn Off Auto-Debit</button></div>'
+        :'<div class="alert alert-info" style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><span>Auto-debit is off. You\'ll need to manually resubscribe before your plan expires.</span><button class="btn btn-sm btn-primary" onclick="enableAutoDebit()">Turn On Auto-Debit</button></div>');
   }else if(pending){
     el.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><div style="font-size:1.1rem;font-weight:700">Monthly Plan</div><div style="font-size:13px;color:var(--text2)">Submitted '+new Date(pending.date).toLocaleDateString()+'</div></div><span class="badge badge-warning">PENDING</span></div><div class="alert alert-info" style="margin-top:14px">Payment under review. We\'ll activate within 24 hours.</div>';
   }else{
@@ -2631,6 +2637,42 @@ async function lSub(){
     cards.push('<div class="plan-card"><h3>Pay Per Consultation</h3><div class="plan-price">₦5,000 <span>/visit</span></div><ul class="plan-features" style="margin-bottom:16px"><li>'+(credits>0?(credits+' credit'+(credits!==1?'s':'')+' already available'):'No monthly commitment')+'</li></ul><button class="btn btn-primary" style="width:100%" onclick="openPaymentModal(\'single\')">'+(credits>0?'Buy Another Consultation':'Pay ₦5,000')+'</button></div>');
   }
   grid.innerHTML=cards.length?cards.join(''):'<div class="alert alert-info" style="grid-column:1/-1">You\'re on our Monthly Plan — unlimited consultations, no need for Pay-Per-Consultation. Thank you for being a TalkDoc member!</div>';
+}
+
+// Turns OFF auto-debit on an active Monthly Plan by asking Paystack to disable
+// the underlying subscription (needs the secret key, so this goes through a
+// server-side Edge Function — never call Paystack's disable endpoint from the
+// browser). The plan itself stays active until its current period ends; it
+// just won't renew automatically after that.
+async function disableAutoDebit(){
+  if(!confirm('Turn off auto-debit? Your card will no longer be charged automatically — you\'ll need to manually resubscribe before your plan expires to keep access.'))return;
+  const approved=await getActiveMonthlyPayment(S.currentUser.id);
+  if(!approved?.paystack_subscription_code||!approved?.paystack_email_token){
+    return alert('Could not find your subscription details. If this keeps happening, contact support.');
+  }
+  try{
+    const {data,error}=await sb.functions.invoke('paystack-cancel-subscription',{body:{
+      subscription_code:approved.paystack_subscription_code,
+      email_token:approved.paystack_email_token
+    }});
+    if(error||!data?.success) throw error||new Error(data?.error||'Unknown error');
+    showSuccess('Auto-Debit Turned Off','You will no longer be charged automatically. Your plan stays active until it expires.','✅');
+    lSub();
+  }catch(e){
+    alert('Could not turn off auto-debit right now. Please try again or contact support.');
+    console.log('disableAutoDebit error:',e);
+  }
+}
+
+// Turns ON auto-debit for a manual (non-recurring) Monthly Plan subscriber.
+// Important: Paystack has no way to convert an existing one-time payment into
+// a recurring one retroactively — turning this on means processing a fresh
+// ₦10,000 charge right now (extending the plan another month) and attaching
+// the recurring plan code to THAT charge, same as subscribing for the first
+// time. The patient is told this plainly before paying.
+async function enableAutoDebit(){
+  if(!confirm('To turn on auto-debit, we\'ll process a fresh ₦10,000 charge now (extending your plan another month) and save your card for automatic monthly renewal after that. Continue?'))return;
+  openPaymentModal('monthly');
 }
 // ============ UNREAD MESSAGE BADGE ============
 // Tracks, per browser/device, when each chat thread was last opened/viewed.
@@ -3589,8 +3631,34 @@ function lAO(){document.getElementById('adminPatientCount').textContent=S.users.
   const pendingEl=document.getElementById('adminPendingApps');
   if(pendingEl && sbReady()){ sb.from('job_applications').select('id',{count:'exact',head:true}).eq('status','pending').then(({count})=>{ if(typeof count==='number') pendingEl.textContent=count; }); }
   const t=document.getElementById('adminRecentPatients');const r=S.users.slice(-5).reverse();if(!r.length){t.innerHTML='<tr><td colspan="5" style="color:var(--text2);text-align:center;padding:20px">No patients yet</td></tr>';return;}t.innerHTML=r.map(u=>{const p=S.payments.filter(x=>x.userId===u.id&&x.status==='approved').pop();return'<tr><td>'+u.name+'</td><td>'+u.email+'</td><td>'+(p?p.plan:'—')+'</td><td><span class="badge badge-'+(p?'success':'gray')+'">'+(p?'Active':'No Plan')+'</span></td><td>'+new Date(u.joined).toLocaleDateString()+'</td></tr>';}).join('');}
-function lAP(){const t=document.getElementById('adminPatientsTable');if(!S.users.length){t.innerHTML='<tr><td colspan="6" style="color:var(--text2);text-align:center;padding:20px">No patients yet</td></tr>';return;}t.innerHTML=S.users.map(u=>{const p=S.payments.filter(x=>x.userId===u.id).pop();return'<tr><td>'+u.name+'</td><td>'+u.email+'</td><td>'+u.phone+'</td><td>'+(p?p.plan:'—')+'</td><td><span class="badge badge-'+(p?.status==='approved'?'success':p?.status==='pending'?'warning':'gray')+'">'+(p?.status||'—')+'</span></td><td><button class="btn btn-sm btn-danger" onclick="delU(\''+u.id+'\')">Delete</button></td></tr>';}).join('');}
-function delU(id){if(!confirm('Delete this user?'))return;S.users=S.users.filter(u=>u.id!==id);sv();lAP();lAO();}
+async function lAP(){
+  const t=document.getElementById('adminPatientsTable');
+  t.innerHTML='<tr><td colspan="6" style="color:var(--text2);text-align:center;padding:20px">Loading…</td></tr>';
+  if(!sbReady()){ t.innerHTML='<tr><td colspan="6" style="color:var(--text2);text-align:center;padding:20px">Supabase not connected</td></tr>'; return; }
+  try{
+    const {data,error}=await sb.functions.invoke('admin-patients',{body:{action:'list'}});
+    if(error) throw error;
+    const patients=data?.patients||[];
+    if(!patients.length){ t.innerHTML='<tr><td colspan="6" style="color:var(--text2);text-align:center;padding:20px">No patients yet</td></tr>'; return; }
+    const statusBadge={active:'success',expired:'danger','one-time':'success',none:'gray'};
+    t.innerHTML=patients.map(u=>'<tr><td>'+u.name+'</td><td>'+u.email+'</td><td>'+(u.phone||'—')+'</td><td>'+u.plan+'</td><td><span class="badge badge-'+(statusBadge[u.status]||'gray')+'">'+u.status+'</span></td><td><button class="btn btn-sm btn-danger" onclick="delU(\''+u.id+'\')">Delete</button></td></tr>').join('');
+  }catch(e){
+    console.log('lAP error:',e);
+    t.innerHTML='<tr><td colspan="6" style="color:var(--text2);text-align:center;padding:20px">Could not load patients — check browser console</td></tr>';
+  }
+}
+async function delU(id){
+  if(!confirm('Delete this patient? This permanently removes their account, consultations, payments, and messages — this cannot be undone.'))return;
+  try{
+    const {data,error}=await sb.functions.invoke('admin-patients',{body:{action:'delete',patientId:id}});
+    if(error||!data?.success) throw error||new Error(data?.error||'Unknown error');
+    lAP();lAO();
+    showSuccess('Patient Deleted','The patient and all related records have been permanently removed.','✅');
+  }catch(e){
+    console.log('delU error:',e);
+    alert('Could not delete this patient. Please try again or check the browser console.');
+  }
+}
 function lAD(){
   const t=document.getElementById('adminDoctorsTable');
   t.innerHTML=S.doctors.map(d=>{
@@ -3721,7 +3789,47 @@ async function adminAddDoctor(){
   showSuccess('Doctor Added!',name+' can now log in with the email and password you set.','✅');
 }
 async function togDr(id){const d=S.doctors.find(x=>x.id===id);if(!d)return;d.status=d.status==='active'?'suspended':'active';if(sbReady()){try{await sb.from('doctors').update({status:d.status}).eq('id',id);}catch(e){console.log('Could not update doctor status in Supabase:',e);}}sv();lAD();renderTeamSection();}
-function lAPay(){const t=document.getElementById('adminPaymentsTable');if(!S.payments.length){t.innerHTML='<tr><td colspan="6" style="color:var(--text2);text-align:center;padding:20px">No payment requests</td></tr>';return;}t.innerHTML=S.payments.map(p=>'<tr><td>'+p.userName+'</td><td>'+p.plan+'</td><td>₦'+(p.amount||0).toLocaleString()+'</td><td>'+new Date(p.date).toLocaleDateString()+'</td><td>'+p.payer+'</td><td style="display:flex;gap:6px">'+(p.status==='pending'?'<button class="btn btn-success btn-sm" onclick="appPay(\''+p.id+'\')">Approve</button><button class="btn btn-danger btn-sm" onclick="rejPay(\''+p.id+'\')">Reject</button>':'<span class="badge badge-'+(p.status==='approved'?'success':'danger')+'">'+p.status+'</span>')+'</td></tr>').join('');}
+async function lAPay(){const t=document.getElementById('adminPaymentsTable');if(!S.payments.length){t.innerHTML='<tr><td colspan="6" style="color:var(--text2);text-align:center;padding:20px">No payment requests</td></tr>';}else{t.innerHTML=S.payments.map(p=>'<tr><td>'+p.userName+'</td><td>'+p.plan+'</td><td>₦'+(p.amount||0).toLocaleString()+'</td><td>'+new Date(p.date).toLocaleDateString()+'</td><td>'+p.payer+'</td><td style="display:flex;gap:6px">'+(p.status==='pending'?'<button class="btn btn-success btn-sm" onclick="appPay(\''+p.id+'\')">Approve</button><button class="btn btn-danger btn-sm" onclick="rejPay(\''+p.id+'\')">Reject</button>':'<span class="badge badge-'+(p.status==='approved'?'success':'danger')+'">'+p.status+'</span>')+'</td></tr>').join('');}
+  await loadAdminPaymentReports();
+}
+
+// Real report, queried live from Supabase (unlike the table above, which only
+// ever reflects whatever happens to be in this browser's local session cache).
+// Builds two views from the same dataset: every patient who's ever paid
+// (deduped to their most recent payment), and the subset of those whose
+// Monthly Plan has since lapsed with nothing newer to replace it.
+async function loadAdminPaymentReports(){
+  const allTable=document.getElementById('adminAllPayersTable');
+  const lapsedTable=document.getElementById('adminLapsedTable');
+  if(!sbReady()){
+    allTable.innerHTML='<tr><td colspan="5" style="color:var(--text2);text-align:center;padding:20px">Supabase not connected</td></tr>';
+    lapsedTable.innerHTML='<tr><td colspan="4" style="color:var(--text2);text-align:center;padding:20px">Supabase not connected</td></tr>';
+    return;
+  }
+  try{
+    const {data,error}=await sb.functions.invoke('admin-patients',{body:{action:'payments-report'}});
+    if(error) throw error;
+    const allPayers=data?.allPayers||[];
+    const lapsed=data?.lapsed||[];
+    const planLabels={monthly:'Monthly Plan',personal:'Personal Plan (legacy)',family:'Family Plan (legacy)',single:'Pay Per Consultation'};
+
+    allTable.innerHTML = allPayers.length ? allPayers.map(r=>{
+      let statusHtml;
+      if(r.active===null) statusHtml='<span class="badge badge-success">One-time</span>';
+      else statusHtml = r.active ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Expired</span>';
+      return '<tr><td>'+r.name+'</td><td>'+r.email+'</td><td>'+(planLabels[r.plan]||r.plan)+'</td><td>'+statusHtml+'</td><td>'+new Date(r.lastPaid).toLocaleDateString('en-NG')+'</td></tr>';
+    }).join('') : '<tr><td colspan="5" style="color:var(--text2);text-align:center;padding:20px">No payments yet</td></tr>';
+
+    lapsedTable.innerHTML = lapsed.length ? lapsed.map(r=>{
+      const autoDebitLabel=r.autoDebit?'<span class="badge badge-warning">Was on — renewal failed</span>':'<span class="badge badge-warning">Off</span>';
+      return '<tr><td>'+r.name+'</td><td>'+r.email+'</td><td>'+autoDebitLabel+'</td><td>'+new Date(r.expiredOn).toLocaleDateString('en-NG')+'</td></tr>';
+    }).join('') : '<tr><td colspan="4" style="color:var(--text2);text-align:center;padding:20px">Nobody currently lapsed 🎉</td></tr>';
+  }catch(e){
+    console.log('loadAdminPaymentReports error:',e);
+    allTable.innerHTML='<tr><td colspan="5" style="color:var(--text2);text-align:center;padding:20px">Could not load — check browser console</td></tr>';
+    lapsedTable.innerHTML='<tr><td colspan="4" style="color:var(--text2);text-align:center;padding:20px">Could not load — check browser console</td></tr>';
+  }
+}
 function appPay(id){const p=S.payments.find(x=>x.id===id);if(!p)return;p.status='approved';p.approvedDate=new Date().toISOString();const u=S.users.find(x=>x.id===p.userId);if(u){u.plan=p.plan;u.planStatus='active';brevoSendSubActivated(u.email,u.name,p.plan);}sv();lAPay();lAO();showSuccess('Payment Approved','Patient subscription activated & confirmation email sent.','✅');}
 function rejPay(id){const p=S.payments.find(x=>x.id===id);if(!p)return;p.status='rejected';sv();lAPay();}
 const JOB_CATEGORIES={
@@ -4430,6 +4538,59 @@ async function brevoSendTrialEnded(email, name){
   } catch(e){ console.log('Trial ended email error:',e); }
 }
 
+// Reminder that a Monthly Plan is about to renew/expire. Wording differs
+// depending on auto-debit: informational if it'll renew on its own, actionable
+// if the patient needs to manually resubscribe. The actual automated send
+// happens from a Netlify scheduled function (see subscription-reminder-check.js)
+// since nobody's browser is open days before renewal — this client-side version
+// exists mainly so admin/manual triggers can reuse the same copy.
+async function brevoSendRenewalReminder(email, name, nextPaymentDate, autoDebit){
+  const firstName=name.split(' ')[0];
+  const dateStr=new Date(nextPaymentDate).toLocaleDateString('en-NG',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  try{
+    await brevoCall('smtp/email',{
+        sender:{name:SENDER_NAME,email:SENDER_EMAIL},
+        to:[{email,name}],
+        subject: autoDebit ? 'Your TalkDoc Plan Renews Soon' : 'Your TalkDoc Plan Expires Soon — Renew to Keep Access',
+        htmlContent:`<div style="font-family:Segoe UI,sans-serif;max-width:600px;margin:0 auto;padding:32px 24px">
+          <h1 style="color:#008181">${autoDebit?'Your Plan Renews Soon':'Your Plan Is About to Expire'}</h1>
+          <p style="color:#4a5568;font-size:15px;line-height:1.75">Hi ${firstName}, your TalkDoc Monthly Plan ${autoDebit?'will automatically renew':'expires'} on <strong>${dateStr}</strong>.</p>
+          ${autoDebit
+            ? `<div style="background:#d1fae5;border-radius:12px;padding:20px;margin:20px 0"><p style="color:#065f46;font-weight:700;margin:0">💳 We'll automatically charge your card on file — no action needed.</p></div>`
+            : `<div style="background:#fef3c7;border-radius:12px;padding:20px;margin:20px 0"><p style="color:#92400e;font-weight:700;margin:0">⏳ Auto-debit is off for your plan — log in and resubscribe before then to avoid losing access.</p></div>
+               <div style="text-align:center;margin:28px 0"><a href="https://talkdoc.ng" style="background:#008181;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;display:inline-block">Renew Now →</a></div>`}
+          <div style="margin-top:28px;padding-top:20px;border-top:1px solid #e8ecef;font-size:12px;color:#b0bec5">
+            TalkDoc · talkdoc26@gmail.com
+          </div>
+        </div>`
+    });
+  } catch(e){ console.log('Renewal reminder email error:',e); }
+}
+
+// Sent once a manual (non-auto-debit) Monthly Plan has actually lapsed —
+// the companion to the trial-ended email, now that plans genuinely expire
+// after 30 days instead of staying active forever (see getActiveMonthlyPayment).
+async function brevoSendPlanExpired(email, name){
+  const firstName=name.split(' ')[0];
+  try{
+    await brevoCall('smtp/email',{
+        sender:{name:SENDER_NAME,email:SENDER_EMAIL},
+        to:[{email,name}],
+        subject:'Your TalkDoc Monthly Plan Has Expired',
+        htmlContent:`<div style="font-family:Segoe UI,sans-serif;max-width:600px;margin:0 auto;padding:32px 24px">
+          <h1 style="color:#008181">Your Monthly Plan Has Expired</h1>
+          <p style="color:#4a5568;font-size:15px;line-height:1.75">Hi ${firstName}, your TalkDoc Monthly Plan has expired since it wasn't set to auto-renew. Resubscribe any time to restore unlimited consultations — or turn on auto-debit next time so this doesn't happen again.</p>
+          <div style="text-align:center;margin:28px 0">
+            <a href="https://talkdoc.ng" style="background:#008181;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;display:inline-block">Resubscribe Now →</a>
+          </div>
+          <div style="margin-top:28px;padding-top:20px;border-top:1px solid #e8ecef;font-size:12px;color:#b0bec5">
+            TalkDoc · talkdoc26@gmail.com
+          </div>
+        </div>`
+    });
+  } catch(e){ console.log('Plan expired email error:',e); }
+}
+
 // Notify someone by email that they have a new TalkDoc message waiting
 // Avoids sending a separate email for every single message in a fast back-and-forth —
 // only one alert email per (recipient) conversation every 5 minutes. This matters
@@ -5069,20 +5230,49 @@ window.openModal=function(n){
 // Check subscription before opening messages
 // Checks whether a patient has an active/approved subscription, using
 // Supabase as the source of truth so this works across devices.
+// Returns the patient's current Monthly Plan payment row IF it's still within
+// its paid period, or null if that period has lapsed. This is what actually
+// enforces "cancel after one month" for manual (non-auto-debit) subscribers —
+// previously the code only checked "has this person ever paid", with no date
+// check at all, so a manual subscriber's access never actually expired.
+// Auto-debit subscribers stay covered continuously because next_payment_date
+// gets pushed forward by the Paystack webhook on every successful recharge;
+// if a renewal charge ever fails, it naturally falls through to expired too.
+async function getActiveMonthlyPayment(userId){
+  if(!userId) return null;
+  const unlimitedPlans=['monthly','personal','family']; // personal/family kept for pre-existing subscribers
+  let row=null;
+  if(sbReady()){
+    try{
+      const {data,error}=await sb.from('payments').select('*').eq('user_id',userId).eq('status','approved').in('plan',unlimitedPlans).order('created_at',{ascending:false}).limit(1);
+      if(!error && data && data.length) row=data[0];
+    }catch(e){ /* fall back below */ }
+  }
+  if(!row){
+    const local=S.payments.filter(p=>p.userId===userId&&p.status==='approved'&&unlimitedPlans.includes(p.plan)).sort((a,b)=>new Date(b.date||b.approvedDate)-new Date(a.date||a.approvedDate))[0];
+    if(local) row={created_at:local.date||local.approvedDate, next_payment_date:local.nextPaymentDate, plan:local.plan, auto_debit:local.autoDebit};
+  }
+  if(!row) return null;
+  const created=new Date(row.created_at);
+  const expiry=row.next_payment_date?new Date(row.next_payment_date):new Date(created.getTime()+30*24*60*60*1000);
+  return expiry>new Date() ? row : null;
+}
+
 async function hasActiveSubscription(userId){
   if(!userId) return false;
+  if(await getActiveMonthlyPayment(userId)) return true;
+  const trial=await getTrialInfo(userId);
+  if(trial&&trial.onTrial) return true;
+  // Anyone who has ever paid anything (single credit included) keeps general
+  // access like messaging, even after that specific credit/period is used up —
+  // this only governs ongoing access, not starting a NEW consultation (that's
+  // canStartNewConsultation's job, which is strict about credits/expiry).
   if(sbReady()){
     try{
       const {data,error}=await sb.from('payments').select('id').eq('user_id',userId).eq('status','approved').limit(1);
-      if(!error && data && data.length) return true;
-      // No paid plan — fall back to checking whether the free trial is still running.
-      const {data:udata,error:uerr}=await sb.from('users').select('trial_end').eq('id',userId).single();
-      if(!uerr && udata?.trial_end && new Date(udata.trial_end)>new Date()) return true;
-      if(!error) return false; // payments query succeeded and found nothing, and no active trial
-    }catch(e){ console.log('Subscription check failed, falling back to local cache:',e); }
+      if(!error) return !!(data && data.length);
+    }catch(e){ /* fall through to local cache */ }
   }
-  const u=S.users.find(x=>x.id===userId);
-  if(u?.trialEnd && new Date(u.trialEnd)>new Date()) return true;
   return !!S.payments.find(p=>p.userId===userId&&p.status==='approved');
 }
 
@@ -5143,15 +5333,7 @@ async function getConsultCredits(userId){
 //  3. A paid Pay-Per-Consultation (₦5,000) credit — allowed once per credit purchased.
 async function canStartNewConsultation(userId){
   if(!userId) return {allowed:false, reason:'none'};
-  const unlimitedPlans=['monthly','personal','family']; // personal/family kept for pre-existing subscribers
-  if(sbReady()){
-    try{
-      const {data,error}=await sb.from('payments').select('id').eq('user_id',userId).eq('status','approved').in('plan',unlimitedPlans).limit(1);
-      if(!error && data && data.length) return {allowed:true, reason:'paid'};
-    }catch(e){ /* fall through to trial/credit check */ }
-  } else if(S.payments.find(p=>p.userId===userId&&p.status==='approved'&&unlimitedPlans.includes(p.plan))){
-    return {allowed:true, reason:'paid'};
-  }
+  if(await getActiveMonthlyPayment(userId)) return {allowed:true, reason:'paid'};
   const trial=await getTrialInfo(userId);
   const count=await getConsultationCount(userId);
   if(trial&&trial.onTrial&&count<1) return {allowed:true, reason:'trial'};
