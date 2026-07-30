@@ -1281,7 +1281,7 @@ html{transition:background-color .35s ease;}
 <div class="dash-section" id="patient-messages"><div class="dash-header"><h1>Messages</h1></div><div class="chat-layout"><div class="chat-list"><div class="chat-list-header">Conversations</div><div id="patientChatList"></div></div><div class="chat-window">
 <div class="chat-window-header"><button class="chat-back-btn" onclick="closePChatMobile()" aria-label="Back to conversations"><svg class="ico"><use href="#icon-back"/></svg></button><div class="doctor-avatar" style="width:36px;height:36px;font-size:.85rem">GR</div><div style="flex:1"><div style="font-weight:700;font-size:14px" id="chatDrName">Dr. Gbadamosi</div><div style="font-size:12px;color:var(--text2)"><span class="online-dot"></span> Online</div></div><button class="btn btn-outline btn-icon" title="Voice call" onclick="startCall('audio')"><svg class="ico"><use href="#icon-phone"/></svg></button><button class="btn btn-outline btn-icon" title="Video call" onclick="startCall('video')"><svg class="ico"><use href="#icon-video"/></svg></button></div>
 <div class="chat-messages" id="patientChatMessages"><div class="msg received">Hello! How can I help you today?<div class="time">Now</div></div></div>
-<div id="patientChatClosedBanner" class="hidden" style="padding:10px 16px;background:#fef3c7;color:#92400e;font-size:13px;text-align:center;font-weight:600">🔒 This consultation has ended — subscribe monthly or pay per consultation to message this doctor again.</div>
+<div id="patientChatClosedBanner" class="hidden" style="padding:10px 16px;background:#fef3c7;color:#92400e;font-size:13px;text-align:center;font-weight:600">🔒 Messaging disabled<br>Start another consultation to continue chatting.</div>
 <div class="chat-input" id="patientChatInputBar"><input type="file" id="patientImgInput" accept="image/*" style="display:none" onchange="sendPatientImage(this.files[0])"><button class="btn btn-outline btn-icon" title="Send a photo" onclick="document.getElementById('patientImgInput').click()"><svg class="ico"><use href="#icon-camera"/></svg></button><button class="btn btn-outline btn-icon" id="patientMicBtn" title="Record a voice note" onclick="toggleVoiceRecording('patient')"><svg class="ico"><use href="#icon-mic"/></svg></button><input type="text" id="patientMsgInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendPatientMsg()"><div class="voice-rec-bar hidden" id="patientVoiceBar"><span class="rec-dot"></span><span id="patientVoiceTimer">0:00</span><span class="rec-label" style="color:var(--text2)">Recording…</span><span style="flex:1"></span><button class="btn btn-sm btn-gray" onclick="cancelVoiceRecording('patient')">Cancel</button><button class="btn btn-sm btn-primary" onclick="stopVoiceRecording('patient',true)">Send</button></div><button class="btn btn-primary" id="patientSendBtn" onclick="sendPatientMsg()">Send</button></div></div></div>
 </div>
 <div class="dash-section" id="patient-community">
@@ -1363,6 +1363,7 @@ html{transition:background-color .35s ease;}
 <div class="dash-section" id="doctor-messages"><div class="dash-header"><h1>Messages</h1></div><div class="chat-layout"><div class="chat-list"><div class="chat-list-header">Patient Chats</div><div id="doctorChatList"></div></div><div class="chat-window">
 <div class="chat-window-header"><button class="chat-back-btn" onclick="closeDChatMobile()" aria-label="Back to conversations"><svg class="ico"><use href="#icon-back"/></svg></button><div class="avatar" style="width:36px;height:36px;font-size:.85rem">P</div><div style="flex:1"><div style="font-weight:700;font-size:14px" id="activeChatPatient">Select a patient</div></div><button class="btn btn-outline btn-icon" title="Voice call" onclick="startCall('audio')"><svg class="ico"><use href="#icon-phone"/></svg></button><button class="btn btn-outline btn-icon" title="Video call" onclick="startCall('video')"><svg class="ico"><use href="#icon-video"/></svg></button></div>
 <div class="chat-messages" id="doctorChatMessages"><div style="text-align:center;color:var(--text2);padding:40px;font-size:14px">Select a patient to start chatting</div></div>
+<div id="doctorChatClosedBanner" class="hidden" style="padding:10px 16px;background:#fef3c7;color:#92400e;font-size:13px;text-align:center;font-weight:600">🔒 Messaging disabled<br>Start another consultation to continue chatting.</div>
 <div class="chat-input"><input type="file" id="doctorImgInput" accept="image/*" style="display:none" onchange="sendDoctorImage(this.files[0])"><button class="btn btn-outline btn-icon" title="Send a photo" onclick="document.getElementById('doctorImgInput').click()"><svg class="ico"><use href="#icon-camera"/></svg></button><button class="btn btn-outline btn-icon" id="doctorMicBtn" title="Record a voice note" onclick="toggleVoiceRecording('doctor')"><svg class="ico"><use href="#icon-mic"/></svg></button><input type="text" id="doctorMsgInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendDoctorMsg()"><div class="voice-rec-bar hidden" id="doctorVoiceBar"><span class="rec-dot"></span><span id="doctorVoiceTimer">0:00</span><span class="rec-label" style="color:var(--text2)">Recording…</span><span style="flex:1"></span><button class="btn btn-sm btn-gray" onclick="cancelVoiceRecording('doctor')">Cancel</button><button class="btn btn-sm btn-primary" onclick="stopVoiceRecording('doctor',true)">Send</button></div><button class="btn btn-primary" id="doctorSendBtn" onclick="sendDoctorMsg()">Send</button></div></div></div>
 </div>
 <div class="dash-section" id="doctor-community">
@@ -1781,7 +1782,7 @@ html{transition:background-color .35s ease;}
 
 <div class="modal-overlay hidden" id="modal-medhistory"><div class="modal"><span class="modal-close" onclick="closeModal('medhistory')">×</span><h2 style="display:flex;align-items:center;gap:8px">Medical History <svg class="ico" style="stroke-width:1.7"><use href="#icon-clipboard"/></svg></h2><p class="subtitle" id="medHistPatientName">Patient</p><div id="medHistAlert"></div><div class="form-group"><label>Allergies</label><textarea id="medHistAllergies" placeholder="e.g. Penicillin, peanuts, latex — or 'None known'" style="min-height:60px"></textarea></div><div class="form-group"><label>Past Medical History (Hypertension, Diabetes, other chronic conditions)</label><textarea id="medHistChronic" placeholder="e.g. Hypertension diagnosed 2019, Type 2 Diabetes — or 'None known'" style="min-height:70px"></textarea></div><div style="font-size:12px;color:var(--text2);margin-bottom:10px" id="medHistMeta"></div><button class="btn btn-primary" style="width:100%" onclick="saveMedHistory()">Save — Visible to All Doctors</button></div></div>
 <div class="modal-overlay hidden" id="modal-confirmBooking"><div class="modal"><span class="modal-close" onclick="closeModal('confirmBooking')">×</span><h2 style="display:flex;align-items:center;gap:8px">Confirm Appointment <svg class="ico" style="stroke-width:1.7"><use href="#icon-scalpel"/></svg></h2><p class="subtitle" id="confirmBookingSub">Patient · Specialty</p><div id="confirmBookingAlert"></div><div class="form-row"><div class="form-group"><label>Confirmed Date</label><input id="confirmBookingDate" type="date"></div><div class="form-group"><label>Confirmed Time</label><input id="confirmBookingTime" type="time"></div></div><div class="form-group"><label>Note to Patient (optional)</label><textarea id="confirmBookingNote" placeholder="e.g. Please join the call 5 minutes early" style="min-height:60px"></textarea></div><button class="btn btn-success" style="width:100%" onclick="confirmSpecialistBooking()">✅ Confirm & Email Patient</button></div></div>
-<div class="modal-overlay hidden" id="modal-notes"><div class="modal"><span class="modal-close" onclick="closeModal('notes')">×</span><h2 style="display:flex;align-items:center;gap:8px">Consultation Notes <svg class="ico" style="stroke-width:1.7"><use href="#icon-clipboard"/></svg></h2><div class="form-group"><label>Patient</label><input id="notesPatient" readonly style="background:var(--gray)"></div><div class="form-group"><label>Notes / Advice</label><textarea id="notesText" style="min-height:90px" placeholder="Enter consultation notes and advice..."></textarea></div><div class="form-group"><label>Prescription (Optional)</label><textarea id="notesPrescription" placeholder="e.g. Paracetamol 500mg, 1 tablet 3x daily for 5 days" style="min-height:70px"></textarea></div><div class="form-group"><label>Referral (Optional)</label><select id="notesReferral"><option value="">No referral needed</option><option>Hospital visit required</option><option>Cardiologist</option><option>Dermatologist</option><option>Pediatrician</option><option>Lab test required</option></select></div><button class="btn btn-success" style="width:100%" onclick="saveNotes()">✅ Save & Complete Consultation</button></div></div>
+<div class="modal-overlay hidden" id="modal-notes"><div class="modal"><span class="modal-close" onclick="closeModal('notes')">×</span><h2 style="display:flex;align-items:center;gap:8px">Consultation Notes <svg class="ico" style="stroke-width:1.7"><use href="#icon-clipboard"/></svg></h2><div class="form-group"><label>Patient</label><input id="notesPatient" readonly style="background:var(--gray)"></div><div class="form-group"><label>Notes / Advice (Optional)</label><textarea id="notesText" style="min-height:90px" placeholder="Enter any final notes or advice for the patient (optional)..."></textarea></div><div class="form-group"><label>Prescription (Optional)</label><textarea id="notesPrescription" placeholder="e.g. Paracetamol 500mg, 1 tablet 3x daily for 5 days" style="min-height:70px"></textarea></div><div class="form-group"><label>Referral (Optional)</label><select id="notesReferral"><option value="">No referral needed</option><option>Hospital visit required</option><option>Cardiologist</option><option>Dermatologist</option><option>Pediatrician</option><option>Lab test required</option></select></div><button class="btn btn-success" style="width:100%" onclick="saveNotes()">✅ Save & Complete Consultation</button></div></div>
 
 <div class="modal-overlay hidden" id="modal-privacy"><div class="modal policy-modal"><span class="modal-close" onclick="closePolicyModal('privacy')">×</span><div class="policy-tag" style="display:flex;align-items:center;gap:6px"><svg class="ico" style="stroke-width:1.7"><use href="#icon-lock"/></svg> Legal Document</div><h2>Privacy Policy</h2><div class="policy-date">Effective Date: July 2025 · TalkDoc Nigeria</div><div class="policy-body" id="privacyBody"></div><div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-gray" onclick="closePolicyModal('privacy')">Close</button><a href="mailto:talkdoc26@gmail.com" class="btn btn-primary"><svg class="ico" style="stroke-width:1.7"><use href="#icon-mail"/></svg> Contact Us</a></div></div></div>
 <div class="modal-overlay hidden" id="modal-terms"><div class="modal policy-modal"><span class="modal-close" onclick="closePolicyModal('terms')">×</span><div class="policy-tag" style="display:flex;align-items:center;gap:6px"><svg class="ico" style="stroke-width:1.7"><use href="#icon-clipboard"/></svg> Legal Document</div><h2>Terms &amp; Conditions</h2><div class="policy-date">Effective Date: July 2025 · TalkDoc Nigeria</div><div class="policy-body" id="termsBody"></div><div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-gray" onclick="closePolicyModal('terms')">Close</button><a href="mailto:talkdoc26@gmail.com" class="btn btn-primary"><svg class="ico" style="stroke-width:1.7"><use href="#icon-mail"/></svg> Contact Us</a></div></div></div>
@@ -2585,15 +2586,17 @@ async function sendConsultRequest(){
     try{
       const {data:c,error}=await sb.from('consultations').insert({patient_id:S.currentUser.id,patient_name:S.currentUser.name,doctor_id:selDoc.id,doctor_name:selDoc.name,symptoms:sym,duration,severity,status:'pending'}).select().single();
       if(error){ alert('Could not submit consultation: '+error.message); return; }
-      await sb.from('messages').insert({thread_id:tid,sender_role:'patient',sender_name:S.currentUser.name,text:firstMsgText});
+      await sb.from('messages').insert({thread_id:tid,sender_role:'patient',sender_name:S.currentUser.name,text:firstMsgText,consultation_id:c.id});
       S.consultations.push({id:c.id,patientId:c.patient_id,patientName:c.patient_name,doctorId:c.doctor_id,doctorName:c.doctor_name,symptoms:c.symptoms,duration:c.duration,severity:c.severity,status:c.status,date:c.created_at});
+      if(!S.messages[tid])S.messages[tid]=[];
+      S.messages[tid].push({from:'patient',name:S.currentUser.name,text:firstMsgText,time:c.created_at,consultationId:c.id});
     }catch(e){ alert('Could not submit consultation. Please try again.'); return; }
   } else {
     // Fallback for local testing without Supabase configured yet
     const c={id:'c'+Date.now(),patientId:S.currentUser.id,patientName:S.currentUser.name,doctorId:selDoc.id,doctorName:selDoc.name,symptoms:sym,duration,severity,status:'pending',date:new Date().toISOString()};
     S.consultations.push(c);
     if(!S.messages[tid])S.messages[tid]=[];
-    S.messages[tid].push({from:'patient',name:S.currentUser.name,text:firstMsgText,time:new Date().toISOString()});
+    S.messages[tid].push({from:'patient',name:S.currentUser.name,text:firstMsgText,time:new Date().toISOString(),consultationId:c.id});
     sv();
   }
 
@@ -2960,7 +2963,7 @@ async function loadMessagesForUser(role,userId){
     const grouped={};
     (data||[]).forEach(row=>{
       if(!grouped[row.thread_id]) grouped[row.thread_id]=[];
-      grouped[row.thread_id].push({from:row.sender_role,name:row.sender_name,text:row.text,time:row.created_at,type:row.message_type||'text',mediaUrl:row.media_url});
+      grouped[row.thread_id].push({from:row.sender_role,name:row.sender_name,text:row.text,time:row.created_at,type:row.message_type||'text',mediaUrl:row.media_url,consultationId:row.consultation_id});
     });
     S.messages=grouped;
   }catch(e){ console.log('Could not load messages from Supabase:',e); }
@@ -3056,7 +3059,20 @@ function scrollChatToBottom(el){
   el.scrollTop=el.scrollHeight;
   requestAnimationFrame(()=>{ el.scrollTop=el.scrollHeight; });
 }
-function renderPMsgs(tid){const m=S.messages[tid]||[];const el=document.getElementById('patientChatMessages');el.innerHTML=m.map(x=>'<div class="msg '+(x.from==='patient'?'sent':'received')+'">'+msgBubbleContent(x)+'<div class="time">'+new Date(x.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</div></div>').join('');scrollChatToBottom(el);}
+function renderPMsgs(tid){
+  const m=S.messages[tid]||[];
+  const el=document.getElementById('patientChatMessages');
+  let lastConsultId=undefined;
+  el.innerHTML=m.map(x=>{
+    let dividerHtml='';
+    if(x.consultationId!==undefined && x.consultationId!==lastConsultId && lastConsultId!==undefined){
+      dividerHtml='<div class="consult-divider" style="text-align:center;margin:18px 0;color:var(--text2);font-size:12px;font-weight:600"><span style="background:var(--card-bg,#fff);padding:0 12px">— New consultation started · '+new Date(x.time).toLocaleDateString('en-NG',{month:'short',day:'numeric',year:'numeric'})+' —</span></div>';
+    }
+    lastConsultId=x.consultationId;
+    return dividerHtml+'<div class="msg '+(x.from==='patient'?'sent':'received')+'">'+msgBubbleContent(x)+'<div class="time">'+new Date(x.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</div></div>';
+  }).join('');
+  scrollChatToBottom(el);
+}
 async function sendPatientImage(file){
   if(!file) return;
   if(!file.type.startsWith('image/')) return alert('Please choose an image file.');
@@ -3067,9 +3083,11 @@ async function sendPatientImage(file){
     if(th.length) aPThread=th[th.length-1];
     else { document.getElementById('patientChatMessages').innerHTML='<div style="text-align:center;padding:30px;color:var(--text2);font-size:14px">Please select a conversation from the left first.</div>'; return; }
   }
-  const canSend=await canSendInThread(aPThread);
+  const us1=aPThread.indexOf('_');
+  const c=await getRelevantConsultation(aPThread.slice(0,us1),aPThread.slice(us1+1));
+  const canSend=(await getActiveMonthlyPayment(S.currentUser?.id)) || !!(c && ['pending','active'].includes(c.status));
   if(!canSend){
-    showSuccess('Consultation Completed','This consultation has ended. Subscribe monthly or pay per consultation to start a new one with this doctor.','🔒');
+    showSuccess('🔒 Messaging disabled','Start another consultation to continue chatting.','🔒');
     setTimeout(()=>{closeModal('success');showDashSection('patient','subscription');},2200);
     return;
   }
@@ -3081,9 +3099,9 @@ async function sendPatientImage(file){
     if(upErr){ alert('Could not upload photo: '+upErr.message); return; }
     const {data:urlData}=sb.storage.from('chat-images').getPublicUrl(path);
     const mediaUrl=urlData.publicUrl;
-    const {error:sendErr}=await sb.from('messages').insert({thread_id:aPThread,sender_role:'patient',sender_name:S.currentUser.name,text:'📷 Photo',message_type:'image',media_url:mediaUrl});
+    const {error:sendErr}=await sb.from('messages').insert({thread_id:aPThread,sender_role:'patient',sender_name:S.currentUser.name,text:'📷 Photo',message_type:'image',media_url:mediaUrl,consultation_id:c?.id||null});
     if(sendErr) throw sendErr;
-    const newMsg={from:'patient',name:S.currentUser.name,text:'📷 Photo',time:new Date().toISOString(),type:'image',mediaUrl};
+    const newMsg={from:'patient',name:S.currentUser.name,text:'📷 Photo',time:new Date().toISOString(),type:'image',mediaUrl,consultationId:c?.id};
     if(!S.messages[aPThread]) S.messages[aPThread]=[];
     S.messages[aPThread].push(newMsg);
     renderPMsgs(aPThread);
@@ -3108,16 +3126,18 @@ async function sendPatientMsg(){
       return;
     }
   }
-  const canSend=await canSendInThread(aPThread);
+  const us=aPThread.indexOf('_');
+  const c=await getRelevantConsultation(aPThread.slice(0,us),aPThread.slice(us+1));
+  const canSend=(await getActiveMonthlyPayment(S.currentUser?.id)) || !!(c && ['pending','active'].includes(c.status));
   if(!canSend){
-    showSuccess('Consultation Completed','This consultation has ended. Subscribe monthly or pay per consultation to start a new one with this doctor.','🔒');
+    showSuccess('🔒 Messaging disabled','Start another consultation to continue chatting.','🔒');
     setTimeout(()=>{closeModal('success');showDashSection('patient','subscription');},2200);
     return;
   }
-  const newMsg={from:'patient',name:S.currentUser.name,text:t,time:new Date().toISOString()};
+  const newMsg={from:'patient',name:S.currentUser.name,text:t,time:new Date().toISOString(),consultationId:c?.id};
   if(sbReady()){
     try{
-      const {error:sendErr}=await sb.from('messages').insert({thread_id:aPThread,sender_role:'patient',sender_name:S.currentUser.name,text:t});
+      const {error:sendErr}=await sb.from('messages').insert({thread_id:aPThread,sender_role:'patient',sender_name:S.currentUser.name,text:t,consultation_id:c?.id||null});
       if(sendErr) throw sendErr;
     }catch(e){
       console.log('Could not save message to Supabase:',e);
@@ -3222,13 +3242,17 @@ async function sendVoiceNote(role,blob,mimeType){
     if(th.length){ thread=th[th.length-1]; if(isPatient) aPThread=thread; else aDThread=thread; }
     else{ alert('Please select a conversation first.'); return; }
   }
-  if(isPatient){
-    const canSend=await canSendInThread(thread);
-    if(!canSend){
-      showSuccess('Consultation Completed','This consultation has ended. Subscribe monthly or pay per consultation to start a new one with this doctor.','🔒');
+  const us2=thread.indexOf('_');
+  const c=await getRelevantConsultation(thread.slice(0,us2),thread.slice(us2+1));
+  const canSend=(isPatient && await getActiveMonthlyPayment(S.currentUser?.id)) || !!(c && ['pending','active'].includes(c.status));
+  if(!canSend){
+    if(isPatient){
+      showSuccess('🔒 Messaging disabled','Start another consultation to continue chatting.','🔒');
       setTimeout(()=>{closeModal('success');showDashSection('patient','subscription');},2200);
-      return;
+    } else {
+      alert('🔒 Messaging disabled — this consultation has ended.');
     }
+    return;
   }
   try{
     const ext = mimeType.includes('ogg') ? 'ogg' : (mimeType.includes('mp4')||mimeType.includes('m4a')) ? 'm4a' : 'webm';
@@ -3237,9 +3261,9 @@ async function sendVoiceNote(role,blob,mimeType){
     if(upErr){ alert('Could not upload voice note: '+upErr.message); return; }
     const {data:urlData}=sb.storage.from('chat-images').getPublicUrl(path);
     const mediaUrl=urlData.publicUrl;
-    const {error:sendErr}=await sb.from('messages').insert({thread_id:thread,sender_role:role,sender_name:S.currentUser.name,text:'🎤 Voice note',message_type:'audio',media_url:mediaUrl});
+    const {error:sendErr}=await sb.from('messages').insert({thread_id:thread,sender_role:role,sender_name:S.currentUser.name,text:'🎤 Voice note',message_type:'audio',media_url:mediaUrl,consultation_id:c?.id||null});
     if(sendErr) throw sendErr;
-    const newMsg={from:role,name:S.currentUser.name,text:'🎤 Voice note',time:new Date().toISOString(),type:'audio',mediaUrl};
+    const newMsg={from:role,name:S.currentUser.name,text:'🎤 Voice note',time:new Date().toISOString(),type:'audio',mediaUrl,consultationId:c?.id};
     if(!S.messages[thread]) S.messages[thread]=[];
     S.messages[thread].push(newMsg);
     if(isPatient) renderPMsgs(thread); else renderDMsgs(thread);
@@ -3524,7 +3548,7 @@ async function lDMsg(){
   }
 }
 let aDThread=null;
-function openDChat(tid,name,el,reveal){
+async function openDChat(tid,name,el,reveal){
   if(reveal===undefined) reveal=true;
   aDThread=tid;
   markThreadRead(tid);
@@ -3538,12 +3562,36 @@ function openDChat(tid,name,el,reveal){
     const layout=document.querySelector('#doctor-messages .chat-layout');
     if(layout) layout.classList.add('chat-open');
   }
+  const us=tid.indexOf('_');
+  const c=await getRelevantConsultation(tid.slice(0,us),tid.slice(us+1));
+  const canSend=!!(c && ['pending','active'].includes(c.status));
+  const banner=document.getElementById('doctorChatClosedBanner');
+  const msgInput=document.getElementById('doctorMsgInput');
+  const sendBtn=document.getElementById('doctorSendBtn');
+  const micBtn=document.getElementById('doctorMicBtn');
+  if(banner) banner.classList.toggle('hidden',canSend);
+  if(msgInput) msgInput.disabled=!canSend;
+  if(sendBtn) sendBtn.disabled=!canSend;
+  if(micBtn) micBtn.disabled=!canSend;
 }
 function closeDChatMobile(){
   const layout=document.querySelector('#doctor-messages .chat-layout');
   if(layout) layout.classList.remove('chat-open');
 }
-function renderDMsgs(tid){const m=S.messages[tid]||[];const el=document.getElementById('doctorChatMessages');el.innerHTML=m.map(x=>'<div class="msg '+(x.from==='doctor'?'sent':'received')+'">'+msgBubbleContent(x)+'<div class="time">'+new Date(x.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</div></div>').join('');scrollChatToBottom(el);}
+function renderDMsgs(tid){
+  const m=S.messages[tid]||[];
+  const el=document.getElementById('doctorChatMessages');
+  let lastConsultId=undefined;
+  el.innerHTML=m.map(x=>{
+    let dividerHtml='';
+    if(x.consultationId!==undefined && x.consultationId!==lastConsultId && lastConsultId!==undefined){
+      dividerHtml='<div class="consult-divider" style="text-align:center;margin:18px 0;color:var(--text2);font-size:12px;font-weight:600"><span style="background:var(--card-bg,#fff);padding:0 12px">— New consultation started · '+new Date(x.time).toLocaleDateString('en-NG',{month:'short',day:'numeric',year:'numeric'})+' —</span></div>';
+    }
+    lastConsultId=x.consultationId;
+    return dividerHtml+'<div class="msg '+(x.from==='doctor'?'sent':'received')+'">'+msgBubbleContent(x)+'<div class="time">'+new Date(x.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</div></div>';
+  }).join('');
+  scrollChatToBottom(el);
+}
 async function sendDoctorImage(file){
   if(!file) return;
   if(!file.type.startsWith('image/')) return alert('Please choose an image file.');
@@ -3554,6 +3602,12 @@ async function sendDoctorImage(file){
     if(th.length) aDThread=th[th.length-1];
     else { document.getElementById('doctorChatMessages').innerHTML='<div style="text-align:center;padding:30px;color:var(--text2);font-size:14px">Please select a patient conversation first.</div>'; return; }
   }
+  const us3=aDThread.indexOf('_');
+  const c1=await getRelevantConsultation(aDThread.slice(0,us3),aDThread.slice(us3+1));
+  if(!c1 || !['pending','active'].includes(c1.status)){
+    alert('🔒 Messaging disabled — this consultation has ended.');
+    return;
+  }
   if(!sbReady()){ alert('Photo sharing needs Supabase to be configured.'); return; }
   try{
     const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
@@ -3562,9 +3616,9 @@ async function sendDoctorImage(file){
     if(upErr){ alert('Could not upload photo: '+upErr.message); return; }
     const {data:urlData}=sb.storage.from('chat-images').getPublicUrl(path);
     const mediaUrl=urlData.publicUrl;
-    const {error:sendErr}=await sb.from('messages').insert({thread_id:aDThread,sender_role:'doctor',sender_name:S.currentUser.name,text:'📷 Photo',message_type:'image',media_url:mediaUrl});
+    const {error:sendErr}=await sb.from('messages').insert({thread_id:aDThread,sender_role:'doctor',sender_name:S.currentUser.name,text:'📷 Photo',message_type:'image',media_url:mediaUrl,consultation_id:c1.id});
     if(sendErr) throw sendErr;
-    const newMsg={from:'doctor',name:S.currentUser.name,text:'📷 Photo',time:new Date().toISOString(),type:'image',mediaUrl};
+    const newMsg={from:'doctor',name:S.currentUser.name,text:'📷 Photo',time:new Date().toISOString(),type:'image',mediaUrl,consultationId:c1.id};
     if(!S.messages[aDThread]) S.messages[aDThread]=[];
     S.messages[aDThread].push(newMsg);
     renderDMsgs(aDThread);
@@ -3592,10 +3646,16 @@ async function sendDoctorMsg(){
       return;
     }
   }
-  const newMsg={from:'doctor',name:S.currentUser.name,text:t,time:new Date().toISOString()};
+  const us4=aDThread.indexOf('_');
+  const c2=await getRelevantConsultation(aDThread.slice(0,us4),aDThread.slice(us4+1));
+  if(!c2 || !['pending','active'].includes(c2.status)){
+    alert('🔒 Messaging disabled — this consultation has ended.');
+    return;
+  }
+  const newMsg={from:'doctor',name:S.currentUser.name,text:t,time:new Date().toISOString(),consultationId:c2.id};
   if(sbReady()){
     try{
-      const {error:sendErr}=await sb.from('messages').insert({thread_id:aDThread,sender_role:'doctor',sender_name:S.currentUser.name,text:t});
+      const {error:sendErr}=await sb.from('messages').insert({thread_id:aDThread,sender_role:'doctor',sender_name:S.currentUser.name,text:t,consultation_id:c2.id});
       if(sendErr) throw sendErr;
     }catch(e){
       console.log('Could not save message to Supabase:',e);
@@ -3654,20 +3714,26 @@ async function saveMedHistory(){
 async function saveNotes(){
   if(!aNid)return;
   const c=S.consultations.find(x=>x.id===aNid);if(!c)return;
-  c.notes=document.getElementById('notesText').value;
-  c.prescription=document.getElementById('notesPrescription').value;
-  c.referral=document.getElementById('notesReferral').value;
+  c.notes=document.getElementById('notesText').value.trim();
+  c.prescription=document.getElementById('notesPrescription').value.trim();
+  c.referral=document.getElementById('notesReferral').value.trim();
   c.status='completed';
   const tid=c.patientId+'_'+c.doctorId;
-  let msg='Your consultation is complete.\n\nNotes: '+c.notes;
-  if(c.prescription)msg+='\n\nPrescription: '+c.prescription;
-  if(c.referral)msg+='\n\nReferral: '+c.referral;
+  let msg;
+  if(!c.notes && !c.prescription && !c.referral){
+    msg='This consultation has been marked as completed by your doctor.';
+  }else{
+    msg='Your consultation is complete.';
+    if(c.notes)msg+='\n\nNotes: '+c.notes;
+    if(c.prescription)msg+='\n\nPrescription: '+c.prescription;
+    if(c.referral)msg+='\n\nReferral: '+c.referral;
+  }
   if(!S.messages[tid])S.messages[tid]=[];
-  S.messages[tid].push({from:'doctor',name:c.doctorName,text:msg,time:new Date().toISOString()});
+  S.messages[tid].push({from:'doctor',name:c.doctorName,text:msg,time:new Date().toISOString(),consultationId:aNid});
   if(sbReady()){
     try{
       await sb.from('consultations').update({status:'completed',notes:c.notes,prescription:c.prescription,referral:c.referral}).eq('id',aNid);
-      await sb.from('messages').insert({thread_id:tid,sender_role:'doctor',sender_name:c.doctorName,text:msg});
+      await sb.from('messages').insert({thread_id:tid,sender_role:'doctor',sender_name:c.doctorName,text:msg,consultation_id:aNid});
     }catch(e){ console.log('Could not save completed notes to Supabase:',e); }
   } else { sv(); }
   closeModal('notes');showSuccess('Consultation Completed!','Notes saved and patient notified.','✅');lDH();
@@ -5313,19 +5379,28 @@ async function getActiveMonthlyPayment(userId){
 // still open (pending/active) — once a doctor marks it completed via Add
 // Notes, sending in that thread stops until they pay for a new consultation,
 // while the past messages themselves remain fully visible forever.
+// Finds the most recent consultation between a specific patient and doctor —
+// this is "the conversation" as far as the 48-hour auto-close / manual-close /
+// new-consultation-divider logic is concerned. Returns {id, status} or null.
+async function getRelevantConsultation(patientId, doctorId){
+  if(sbReady()){
+    try{
+      const {data,error}=await sb.from('consultations').select('id,status').eq('patient_id',patientId).eq('doctor_id',doctorId).order('created_at',{ascending:false}).limit(1);
+      if(!error && data && data.length) return data[0];
+      if(!error) return null;
+    }catch(e){ /* fall through to local cache */ }
+  }
+  const localMatches=S.consultations.filter(c=>c.patientId===patientId&&c.doctorId===doctorId).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  return localMatches.length ? {id:localMatches[0].id, status:localMatches[0].status} : null;
+}
+
 async function canSendInThread(threadId){
   if(!threadId) return false;
   if(await getActiveMonthlyPayment(S.currentUser?.id)) return true;
   const us=threadId.indexOf('_');
   const patientId=threadId.slice(0,us), doctorId=threadId.slice(us+1);
-  if(sbReady()){
-    try{
-      const {data,error}=await sb.from('consultations').select('status').eq('patient_id',patientId).eq('doctor_id',doctorId).order('created_at',{ascending:false}).limit(1);
-      if(!error) return !!(data && data.length && ['pending','active'].includes(data[0].status));
-    }catch(e){ /* fall through to local cache */ }
-  }
-  const localMatches=S.consultations.filter(c=>c.patientId===patientId&&c.doctorId===doctorId).sort((a,b)=>new Date(b.date)-new Date(a.date));
-  return !!(localMatches.length && ['pending','active'].includes(localMatches[0].status));
+  const c=await getRelevantConsultation(patientId,doctorId);
+  return !!(c && ['pending','active'].includes(c.status));
 }
 
 async function hasActiveSubscription(userId){
@@ -5832,6 +5907,19 @@ function staggerWords(el){
       });
       node.replaceWith(frag);
     } else if(node.nodeType===1){
+    } else if(node.nodeType===1){
+      // Gradient-text elements (like .accent) rely on background-clip:text
+      // painting through their OWN direct text. Splitting their words into
+      // separate child <span> elements breaks that — the children inherit
+      // transparent text-fill-color but have no gradient background of their
+      // own to show through, so the text goes fully invisible. Animate them
+      // as a single unit instead of recursing into their words.
+      if(node.classList && node.classList.contains('accent')){
+        node.classList.add('rw');
+        node.style.animationDelay=(0.3+i*0.11)+'s';
+        i++;
+        return;
+      }
       Array.from(node.childNodes).forEach(walk);
     }
   }
