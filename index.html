@@ -3732,7 +3732,16 @@ async function saveNotes(){
   S.messages[tid].push({from:'doctor',name:c.doctorName,text:msg,time:new Date().toISOString(),consultationId:aNid});
   if(sbReady()){
     try{
-      await sb.from('consultations').update({status:'completed',notes:c.notes,prescription:c.prescription,referral:c.referral}).eq('id',aNid);
+      // Status is the critical part — it's what actually closes the
+      // consultation and blocks further messaging. Update it on its own
+      // first so a problem with the notes/prescription/referral columns
+      // (as just happened — they didn't exist in the database at all)
+      // can never silently prevent the consultation from actually closing.
+      const {error:statusErr}=await sb.from('consultations').update({status:'completed'}).eq('id',aNid);
+      if(statusErr){ console.log('Could not close consultation:',statusErr); alert('Could not close this consultation. Please try again or contact support.'); return; }
+      try{
+        await sb.from('consultations').update({notes:c.notes,prescription:c.prescription,referral:c.referral}).eq('id',aNid);
+      }catch(e){ console.log('Consultation closed, but could not save notes/prescription/referral:',e); }
       await sb.from('messages').insert({thread_id:tid,sender_role:'doctor',sender_name:c.doctorName,text:msg,consultation_id:aNid});
     }catch(e){ console.log('Could not save completed notes to Supabase:',e); }
   } else { sv(); }
