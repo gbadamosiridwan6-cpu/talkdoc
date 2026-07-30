@@ -1,7 +1,0 @@
-[build]
-  functions = "netlify/functions"
-
-# Runs once a day and emails any patient whose 3-day free trial just ended
-# (and who hasn't subscribed) — see netlify/functions/trial-expiry-check.js
-[functions."trial-expiry-check"]
-  schedule = "@daily"
