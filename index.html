@@ -3243,8 +3243,9 @@ async function sendVoiceNote(role,blob,mimeType){
     else{ alert('Please select a conversation first.'); return; }
   }
   const us2=thread.indexOf('_');
-  const c=await getRelevantConsultation(thread.slice(0,us2),thread.slice(us2+1));
-  const canSend=(isPatient && await getActiveMonthlyPayment(S.currentUser?.id)) || !!(c && ['pending','active'].includes(c.status));
+  const patientId2=thread.slice(0,us2);
+  const c=await getRelevantConsultation(patientId2,thread.slice(us2+1));
+  const canSend=(await getActiveMonthlyPayment(patientId2)) || !!(c && ['pending','active'].includes(c.status));
   if(!canSend){
     if(isPatient){
       showSuccess('🔒 Messaging disabled','Start another consultation to continue chatting.','🔒');
@@ -3603,8 +3604,10 @@ async function sendDoctorImage(file){
     else { document.getElementById('doctorChatMessages').innerHTML='<div style="text-align:center;padding:30px;color:var(--text2);font-size:14px">Please select a patient conversation first.</div>'; return; }
   }
   const us3=aDThread.indexOf('_');
-  const c1=await getRelevantConsultation(aDThread.slice(0,us3),aDThread.slice(us3+1));
-  if(!c1 || !['pending','active'].includes(c1.status)){
+  const patientId3=aDThread.slice(0,us3);
+  const c1=await getRelevantConsultation(patientId3,aDThread.slice(us3+1));
+  const canSend1=(await getActiveMonthlyPayment(patientId3)) || !!(c1 && ['pending','active'].includes(c1.status));
+  if(!canSend1){
     alert('🔒 Messaging disabled — this consultation has ended.');
     return;
   }
@@ -3616,9 +3619,9 @@ async function sendDoctorImage(file){
     if(upErr){ alert('Could not upload photo: '+upErr.message); return; }
     const {data:urlData}=sb.storage.from('chat-images').getPublicUrl(path);
     const mediaUrl=urlData.publicUrl;
-    const {error:sendErr}=await sb.from('messages').insert({thread_id:aDThread,sender_role:'doctor',sender_name:S.currentUser.name,text:'📷 Photo',message_type:'image',media_url:mediaUrl,consultation_id:c1.id});
+    const {error:sendErr}=await sb.from('messages').insert({thread_id:aDThread,sender_role:'doctor',sender_name:S.currentUser.name,text:'📷 Photo',message_type:'image',media_url:mediaUrl,consultation_id:c1?.id||null});
     if(sendErr) throw sendErr;
-    const newMsg={from:'doctor',name:S.currentUser.name,text:'📷 Photo',time:new Date().toISOString(),type:'image',mediaUrl,consultationId:c1.id};
+    const newMsg={from:'doctor',name:S.currentUser.name,text:'📷 Photo',time:new Date().toISOString(),type:'image',mediaUrl,consultationId:c1?.id};
     if(!S.messages[aDThread]) S.messages[aDThread]=[];
     S.messages[aDThread].push(newMsg);
     renderDMsgs(aDThread);
@@ -3647,15 +3650,17 @@ async function sendDoctorMsg(){
     }
   }
   const us4=aDThread.indexOf('_');
-  const c2=await getRelevantConsultation(aDThread.slice(0,us4),aDThread.slice(us4+1));
-  if(!c2 || !['pending','active'].includes(c2.status)){
+  const patientId4=aDThread.slice(0,us4);
+  const c2=await getRelevantConsultation(patientId4,aDThread.slice(us4+1));
+  const canSend2=(await getActiveMonthlyPayment(patientId4)) || !!(c2 && ['pending','active'].includes(c2.status));
+  if(!canSend2){
     alert('🔒 Messaging disabled — this consultation has ended.');
     return;
   }
-  const newMsg={from:'doctor',name:S.currentUser.name,text:t,time:new Date().toISOString(),consultationId:c2.id};
+  const newMsg={from:'doctor',name:S.currentUser.name,text:t,time:new Date().toISOString(),consultationId:c2?.id};
   if(sbReady()){
     try{
-      const {error:sendErr}=await sb.from('messages').insert({thread_id:aDThread,sender_role:'doctor',sender_name:S.currentUser.name,text:t,consultation_id:c2.id});
+      const {error:sendErr}=await sb.from('messages').insert({thread_id:aDThread,sender_role:'doctor',sender_name:S.currentUser.name,text:t,consultation_id:c2?.id||null});
       if(sendErr) throw sendErr;
     }catch(e){
       console.log('Could not save message to Supabase:',e);
