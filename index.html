@@ -1881,7 +1881,19 @@ if(localStorage.getItem('td_ver')!=='v3'){localStorage.removeItem('td_d');localS
   sv();
 })();
 
-function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p)?.classList.add('active');window.scrollTo(0,0);setTimeout(initReveal,120);}
+// Updates the address bar without a full page reload, so Sign In, Sign Up,
+// and Dashboard all get real, bookmarkable/shareable URLs even though this
+// is still one single-page app under the hood. Netlify's _redirects file
+// makes sure visiting these paths directly (or refreshing on them) still
+// serves this same index.html instead of 404ing.
+function pushUrlPath(path){
+  if(window.location.pathname===path) return;
+  history.pushState({},'',path);
+}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p)?.classList.add('active');window.scrollTo(0,0);setTimeout(initReveal,120);
+  if(p==='landing') pushUrlPath('/');
+  else if(p==='patient-dashboard'||p==='doctor-dashboard'||p==='admin-dashboard') pushUrlPath('/dashboard');
+}
 function showAffilTab(tab,btn){
   document.querySelectorAll('.affil-grid').forEach(g=>g.classList.add('hidden'));
   document.getElementById('affil-'+tab)?.classList.remove('hidden');
@@ -1925,7 +1937,10 @@ function showDashSection(role,section){
     },history:lPHist,subscription:lSub,messages:lPMsg,community:lPCommunity,profile:lPProf},doctor:{home:lDH,patients:lDPat,messages:lDMsg,consultations:lDC,community:lPCommunity,earnings:lDrEarnings,profile:lDProf},admin:{overview:lAO,patients:lAP,doctors:lAD,tracking:lAdminTracking,payments:lAPay,doctorApps:lAdminApplications,queue:lAdminQueue,newsletter:lAdminNewsletter,affiliations:lAdminAffiliations,staffteam:lAdminStaffTeam,specialistbookings:lAdminSpecialistBookings,community:lAdminCommunity}};
   L[role]?.[section]?.();
 }
-function openModal(n){document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden'));document.getElementById('modal-'+n)?.classList.remove('hidden');if(n==='login')prefillRememberedLogin();}
+function openModal(n){document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden'));document.getElementById('modal-'+n)?.classList.remove('hidden');if(n==='login')prefillRememberedLogin();
+  if(n==='login') pushUrlPath('/login');
+  else if(n==='register') pushUrlPath('/signup');
+}
 let _returnToRegisterFromPolicy=false;
 function viewPolicyDuringSignup(which){_returnToRegisterFromPolicy=true;openModal(which);}
 function closePolicyModal(which){
@@ -1935,7 +1950,9 @@ function closePolicyModal(which){
     openModal('register');
   }
 }
-function closeModal(n){document.getElementById('modal-'+n)?.classList.add('hidden');}
+function closeModal(n){document.getElementById('modal-'+n)?.classList.add('hidden');
+  if((n==='login'||n==='register') && (window.location.pathname==='/login'||window.location.pathname==='/signup')) pushUrlPath('/');
+}
 function switchModal(a,b){closeModal(a);openModal(b);}
 document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.add('hidden');});});
 function showSuccess(t,m,i='✅'){document.getElementById('successIcon').textContent=i;document.getElementById('successTitle').textContent=t;document.getElementById('successMsg').textContent=m;openModal('success');}
@@ -2238,6 +2255,23 @@ window.addEventListener('load',()=>{
   // still the email/password + role==='admin' check in doAdminLogin(); this just
   // keeps the option from being visible/discoverable to ordinary visitors.
   if(window.location.hash==='#td-admin-portal'){ openModal('adminLogin'); history.replaceState(null,'',window.location.pathname+window.location.search); }
+  // Initial routing for the real, bookmarkable /login, /signup, /dashboard
+  // URLs. /dashboard specifically still respects the site's existing privacy
+  // design above — visiting it directly never auto-restores a session; it
+  // just sends you to log in properly first, same as clicking "My Dashboard"
+  // would if you weren't already signed in.
+  (function initialRoute(){
+    const path=window.location.pathname;
+    if(path==='/login'){ openModal('login'); }
+    else if(path==='/signup'||path==='/register'){ openModal('register'); }
+    else if(path==='/dashboard'){ history.replaceState({},'','/login'); openModal('login'); }
+  })();
+  window.addEventListener('popstate',()=>{
+    const path=window.location.pathname;
+    if(path==='/login'){ openModal('login'); }
+    else if(path==='/signup'||path==='/register'){ openModal('register'); }
+    else if(path==='/'){ document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden')); }
+  });
   setupOTP();
   setTimeout(initReveal,350); // fires immediately, independent of any network calls below — the hero fade-in should never wait on data fetches unrelated to it
   const sv2=document.getElementById('severity');if(sv2)sv2.addEventListener('input',()=>document.getElementById('severityVal').textContent=sv2.value);
