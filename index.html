@@ -948,7 +948,7 @@ html{transition:background-color .35s ease;}
 
 <div class="fc-slide" data-i="4">
   <div class="fc-media"><img src="https://images.pexels.com/photos/1128316/pexels-photo-1128316.jpeg?auto=compress&cs=tinysrgb&h=627&fit=crop&w=1200" alt="A happy family enjoying quality time together outdoors in a lush green park" onerror="this.style.display='none'"></div>
-  <div class="fc-content"><div class="feature-icon" style="color:var(--primary)"><svg class="ico" style="width:24px;height:24px;stroke-width:1.6"><use href="#icon-family"/></svg></div><h3>Flexible Pricing</h3><p>Go unlimited for ₦10,000/month, or pay ₦5,000 only when you need a consultation.</p></div>
+  <div class="fc-content"><div class="feature-icon" style="color:var(--primary)"><svg class="ico" style="width:24px;height:24px;stroke-width:1.6"><use href="#icon-family"/></svg></div><h3>Flexible Pricing</h3><p>Go unlimited for ₦5,000/month, or pay ₦2,500 only when you need a consultation.</p></div>
 </div>
 
 <div class="fc-slide" data-i="5">
@@ -981,7 +981,7 @@ html{transition:background-color .35s ease;}
       <div class="timeline-visual" style="--tint:var(--primary-light)"><svg class="ico"><use href="#icon-user"/></svg></div>
     </div>
     <div class="timeline-item reverse reveal-right">
-      <div class="timeline-content"><span class="timeline-eyebrow">Step 02</span><h4>Choose a Plan</h4><p>Go unlimited with the Monthly Plan (₦10,000), or pay ₦5,000 per consultation — whichever suits you.</p></div>
+      <div class="timeline-content"><span class="timeline-eyebrow">Step 02</span><h4>Choose a Plan</h4><p>Go unlimited with the Monthly Plan (₦5,000), or pay ₦2,500 per consultation — whichever suits you.</p></div>
       <div class="timeline-node">2</div>
       <div class="timeline-visual" style="--tint:#e6f9f4"><svg class="ico"><use href="#icon-card"/></svg></div>
     </div>
@@ -1005,8 +1005,8 @@ html{transition:background-color .35s ease;}
 <p class="section-sub">No hidden fees. Cancel anytime.</p>
   </div>
   <div class="plans-grid">
-<div class="plan-card popular reveal-left"><div class="popular-badge">✨ BEST VALUE</div><h3>Monthly Plan</h3><p style="font-size:13px;color:var(--text2)">Unlimited care, one flat fee</p><div class="plan-price">₦10,000 <span>/month</span></div><ul class="plan-features"><li>Unlimited general consultations</li><li>Medical advice & guidance</li><li>Digital prescriptions</li><li>Hospital referral letters</li><li>Follow-up consultations</li><li>Cancel anytime</li></ul><button class="btn btn-primary" style="width:100%" onclick="openModal('register')">Subscribe Now</button></div>
-<div class="plan-card reveal-pop"><h3>Pay Per Consultation</h3><p class="plan-subtitle">No commitment, pay as you go</p><div class="plan-price">₦5,000 <span>/visit</span></div><ul class="plan-features"><li>One doctor consultation</li><li>Medical advice & guidance</li><li>Digital prescription if needed</li><li>Hospital referral letter if needed</li><li>No monthly commitment</li></ul><button class="btn btn-primary" style="width:100%" onclick="openModal('register')">Get Started</button></div>
+<div class="plan-card popular reveal-left"><div class="popular-badge">✨ BEST VALUE</div><h3>Monthly Plan</h3><p style="font-size:13px;color:var(--text2)">Unlimited care, one flat fee</p><div class="plan-price">₦5,000 <span>/month</span></div><ul class="plan-features"><li>Unlimited general consultations</li><li>Medical advice & guidance</li><li>Digital prescriptions</li><li>Hospital referral letters</li><li>Follow-up consultations</li><li>Cancel anytime</li></ul><button class="btn btn-primary" style="width:100%" onclick="openModal('register')">Subscribe Now</button></div>
+<div class="plan-card reveal-pop"><h3>Pay Per Consultation</h3><p class="plan-subtitle">No commitment, pay as you go</p><div class="plan-price">₦2,500 <span>/visit</span></div><ul class="plan-features"><li>One doctor consultation</li><li>Medical advice & guidance</li><li>Digital prescription if needed</li><li>Hospital referral letter if needed</li><li>No monthly commitment</li></ul><button class="btn btn-primary" style="width:100%" onclick="openModal('register')">Get Started</button></div>
 <div class="plan-card reveal-right"><h3>Specialist Care</h3><p style="font-size:13px;color:var(--text2)">When you need a specialist</p><div class="plan-price" style="font-size:1.4rem">Custom <span>pricing</span></div><ul class="plan-features"><li>Cardiologist, Dermatologist & more</li><li>Referred by your primary doctor</li><li>Specialist-set consultation fees</li><li>Detailed specialist reports</li><li>Follow-up care included</li></ul><button class="btn btn-teal" style="width:100%" onclick="openModal('register')">Get Started</button></div>
   </div>
 </div>
@@ -1671,7 +1671,7 @@ html{transition:background-color .35s ease;}
 <div class="modal">
   <span class="modal-close" onclick="closeModal('payment')">×</span>
   <h2 style="display:flex;align-items:center;gap:8px">Complete Subscription <svg class="ico" style="stroke-width:1.7"><use href="#icon-card"/></svg></h2>
-  <p class="subtitle" id="payModalSub">Monthly Plan – ₦10,000/month</p>
+  <p class="subtitle" id="payModalSub">Monthly Plan – ₦5,000/month</p>
   <div id="payAlert"></div>
   <!-- Plan summary box -->
   <div style="background:linear-gradient(135deg,var(--primary-light),rgba(62,204,241,.08));border:1.5px solid var(--primary);border-radius:var(--r);padding:18px 20px;margin-bottom:20px;">
@@ -1920,8 +1920,8 @@ function showDashSection(role,section){
           lockCard.classList.remove('hidden');
           const msgEl=lockCard.querySelector('p');
           if(msgEl) msgEl.textContent=check.reason==='trial_used'
-            ?'You\'ve used your free trial consultation. Subscribe monthly (₦10,000) or pay ₦5,000 per consultation.'
-            :'You need an active plan. Subscribe monthly (₦10,000) or pay ₦5,000 for a single consultation.';
+            ?'You\'ve used your free trial consultation. Subscribe monthly (₦5,000) or pay ₦2,500 per consultation.'
+            :'You need an active plan. Subscribe monthly (₦5,000) or pay ₦2,500 for a single consultation.';
         }
         if(catCard) catCard.classList.add('hidden');
         if(drCard) drCard.classList.add('hidden');
@@ -2384,12 +2384,12 @@ function setupOTP(){
 // PAYMENT — Paystack
 const PAYSTACK_KEY = 'pk_live_0a9af3c69f31864db76b2ddc1d436a0df26f4e2f';
 // Auto-debit / recurring billing: create this Plan once in your Paystack
-// Dashboard → Payments → Plans (Monthly, ₦10,000/monthly), then paste the
+// Dashboard → Payments → Plans (Monthly, ₦5,000/monthly), then paste the
 // plan_code Paystack gives you (looks like "PLN_xxxxxxxxxx") here.
 // Attaching a plan code to a transaction is what tells Paystack to save the card
 // and auto-charge it every month — nothing else needs to change for that part.
 // Pay-Per-Consultation ('single') deliberately has NO entry here — it must never
-// auto-recur, it's a one-time ₦5,000 purchase.
+// auto-recur, it's a one-time ₦2,500 purchase.
 const PAYSTACK_PLAN_CODES = {
   monthly: 'PLN_lvme07fu5eewr17'
 };
@@ -2397,8 +2397,8 @@ let curPlan = 'monthly';
 
 function openPaymentModal(plan){
   curPlan = plan;
-  const labels = {monthly:'Monthly Plan – ₦10,000/month', single:'Pay Per Consultation – ₦5,000'};
-  const amounts = {monthly:'₦10,000', single:'₦5,000'};
+  const labels = {monthly:'Monthly Plan – ₦5,000/month', single:'Pay Per Consultation – ₦2,500'};
+  const amounts = {monthly:'₦5,000', single:'₦2,500'};
   const planLabels = {monthly:'Monthly Plan', single:'Pay Per Consultation'};
   document.getElementById('payModalSub').textContent = labels[plan];
   document.getElementById('payAmount').textContent = amounts[plan];
@@ -2414,7 +2414,7 @@ function payWithPaystack(){
   if(!email) return showAlert('payAlert','Please enter your email address');
   if(!/^[^@]+@[^@]+\.[^@]+$/.test(email)) return showAlert('payAlert','Please enter a valid email address');
 
-  const amounts = {monthly:1000000, single:500000}; // in kobo
+  const amounts = {monthly:500000, single:250000}; // in kobo
   const planNames = {monthly:'TalkDoc Monthly Plan', single:'TalkDoc Single Consultation'};
   const planCode = PAYSTACK_PLAN_CODES[curPlan];
   const hasRealPlanCode = planCode && !planCode.includes('REPLACE_WITH');
@@ -2433,7 +2433,7 @@ custom_fields:[
 },
 callback: function(response){
 // Payment successful
-onPaystackSuccess(response, email, hasRealPlanCode);
+onPaystackSuccess(response, email);
 },
 onClose: function(){
 showAlert('payAlert','Payment cancelled. Try again when ready.','error');
@@ -2447,14 +2447,16 @@ showAlert('payAlert','Payment cancelled. Try again when ready.','error');
   handler.openIframe();
 }
 
-async function onPaystackSuccess(response, email, autoDebit){
+async function onPaystackSuccess(response, email){
   closeModal('payment');
-  const amount = curPlan==='single' ? 5000 : 10000;
-  const expectedKobo = curPlan==='single' ? 500000 : 1000000;
-
-  // Verify the transaction actually happened, server-side, before activating anything.
-  // Paystack's client-side popup callback alone can be triggered without a real
-  // payment (e.g. from devtools), so this check is what actually gates access.
+  // Verification AND finalization (inserting the payment, granting any consult
+  // credit) now happen entirely server-side in paystack-verify — the client
+  // no longer inserts into "payments" or calls grant_consult_credit directly.
+  // This closes a real gap: a payments row used to be something the browser
+  // itself created after verification, and nothing stopped a technical user
+  // from skipping verification and inserting a fake "approved" row for
+  // themselves directly. Now the database only ever accepts that insert from
+  // this trusted server-side function, never from the browser.
   if(!sbReady()){ showAlert('payAlert','Supabase is not configured — cannot verify payment.'); return; }
   showSuccess('Verifying Payment…','Please wait while we confirm your payment with Paystack.','⏳');
   let verifyResult;
@@ -2467,48 +2469,24 @@ async function onPaystackSuccess(response, email, autoDebit){
     showAlert('payAlert','Could not verify your payment. If you were charged, contact support with reference '+response.reference+'.');
     return;
   }
-  if(!verifyResult?.verified || verifyResult.amount!==expectedKobo){
+  if(!verifyResult?.verified){
     closeModal('success');
     showAlert('payAlert','Payment verification failed. If you were charged, contact support with reference '+response.reference+'.');
     return;
   }
-
-  let payment = {
-id: 'pay'+Date.now(),
-userId: S.currentUser?.id,
-userName: S.currentUser?.name || email,
-plan: curPlan,
-amount: amount,
-reference: response.reference,
-status: 'approved',
-approvedDate: new Date().toISOString(),
-date: new Date().toISOString(),
-method: 'paystack',
-autoDebit: !!autoDebit,
-nextPaymentDate: curPlan==='monthly'?new Date(Date.now()+30*24*60*60*1000).toISOString():null
-  };
-  if(S.currentUser?.id){
-    try{
-      const {data,error}=await sb.from('payments').insert({user_id:S.currentUser.id,plan:curPlan,amount,method:'paystack',status:'approved',paystack_reference:response.reference,auto_debit:!!autoDebit,next_payment_date:payment.nextPaymentDate}).select().single();
-      if(!error && data){ payment.id=data.id; payment.approvedDate=data.created_at; payment.date=data.created_at; }
-    }catch(e){ console.log('Could not save payment to Supabase (kept locally for this session):',e); }
-
-    // Pay-Per-Consultation grants exactly one consultation credit — it is NOT
-    // a subscription, so it must never be treated as unlimited access.
-    if(curPlan==='single'){
-      try{ await sb.rpc('grant_consult_credit',{p_user_id:S.currentUser.id,p_amount:1}); }
-      catch(e){ console.log('Could not grant consult credit:',e); }
-    }
-  }
-  S.payments.push(payment);
-  if(S.currentUser && curPlan==='monthly'){
-S.currentUser.plan = curPlan;
-S.currentUser.planStatus = 'active';
-const idx = S.users.findIndex(u=>u.id===S.currentUser.id);
-if(idx>=0){S.users[idx].plan=curPlan;S.users[idx].planStatus='active';}
+  // The plan is whatever the SERVER determined from the actual verified
+  // amount — authoritative, not necessarily identical to curPlan if something
+  // odd happened, so we use the server's answer for the UI from here on.
+  const plan=verifyResult.plan;
+  await loadPaymentsForPatient(S.currentUser.id);
+  if(S.currentUser && plan==='monthly'){
+    S.currentUser.plan = plan;
+    S.currentUser.planStatus = 'active';
+    const idx = S.users.findIndex(u=>u.id===S.currentUser.id);
+    if(idx>=0){S.users[idx].plan=plan;S.users[idx].planStatus='active';}
   }
   sv();
-  if(curPlan==='single'){
+  if(plan==='single'){
     showSuccess('Payment Confirmed! 🎉','Reference: '+response.reference+'. You now have 1 consultation credit — taking you to start your consultation now.','🎉');
   }else{
     showSuccess('Subscription Activated! 🎉','Payment confirmed. Reference: '+response.reference+'. Your Monthly Plan is now active — taking you to start a consultation now.','🎉');
@@ -2582,7 +2560,7 @@ async function selDr(id,name){
   // Check whether this patient can start a NEW consultation (paid, or trial with their one free consult still unused)
   const check=await canStartNewConsultation(S.currentUser?.id);
   if(!check.allowed){
-    const msg=check.reason==='trial_used'?'You\'ve used your free trial consultation. Subscribe monthly (₦10,000) or pay ₦5,000 for a single consultation?':'You need an active plan to consult a doctor. Subscribe monthly (₦10,000) or pay ₦5,000 for a single consultation?';
+    const msg=check.reason==='trial_used'?'You\'ve used your free trial consultation. Subscribe monthly (₦5,000) or pay ₦2,500 for a single consultation?':'You need an active plan to consult a doctor. Subscribe monthly (₦5,000) or pay ₦2,500 for a single consultation?';
     if(!confirm(msg))return;
     showDashSection('patient','subscription');return;
   }
@@ -2595,7 +2573,7 @@ async function sendConsultRequest(){
   if(!S.currentUser)return;
   const check=await canStartNewConsultation(S.currentUser.id);
   if(!check.allowed){
-    const msg=check.reason==='trial_used'?'You\'ve used your free trial consultation. Subscribe monthly (₦10,000) or pay ₦5,000 for a single consultation?':'You need an active plan. Subscribe monthly (₦10,000) or pay ₦5,000 for a single consultation?';
+    const msg=check.reason==='trial_used'?'You\'ve used your free trial consultation. Subscribe monthly (₦5,000) or pay ₦2,500 for a single consultation?':'You need an active plan. Subscribe monthly (₦5,000) or pay ₦2,500 for a single consultation?';
     if(!confirm(msg))return; showDashSection('patient','subscription'); return;
   }
   // If this consultation is being paid for out of a purchased Pay-Per-Consultation
@@ -2686,8 +2664,8 @@ async function lSub(){
   const grid=document.getElementById('subscriptionPlansGrid');
   const cards=[];
   if(!approved){
-    cards.push('<div class="plan-card popular"><div class="popular-badge">✨ BEST VALUE</div><h3>Monthly Plan</h3><div class="plan-price">₦10,000 <span>/month</span></div><ul class="plan-features" style="margin-bottom:16px"><li>Unlimited consultations</li></ul><button class="btn btn-primary" style="width:100%" onclick="openPaymentModal(\'monthly\')">Subscribe</button></div>');
-    cards.push('<div class="plan-card"><h3>Pay Per Consultation</h3><div class="plan-price">₦5,000 <span>/visit</span></div><ul class="plan-features" style="margin-bottom:16px"><li>'+(credits>0?(credits+' credit'+(credits!==1?'s':'')+' already available'):'No monthly commitment')+'</li></ul><button class="btn btn-primary" style="width:100%" onclick="openPaymentModal(\'single\')">'+(credits>0?'Buy Another Consultation':'Pay ₦5,000')+'</button></div>');
+    cards.push('<div class="plan-card popular"><div class="popular-badge">✨ BEST VALUE</div><h3>Monthly Plan</h3><div class="plan-price">₦5,000 <span>/month</span></div><ul class="plan-features" style="margin-bottom:16px"><li>Unlimited consultations</li></ul><button class="btn btn-primary" style="width:100%" onclick="openPaymentModal(\'monthly\')">Subscribe</button></div>');
+    cards.push('<div class="plan-card"><h3>Pay Per Consultation</h3><div class="plan-price">₦2,500 <span>/visit</span></div><ul class="plan-features" style="margin-bottom:16px"><li>'+(credits>0?(credits+' credit'+(credits!==1?'s':'')+' already available'):'No monthly commitment')+'</li></ul><button class="btn btn-primary" style="width:100%" onclick="openPaymentModal(\'single\')">'+(credits>0?'Buy Another Consultation':'Pay ₦2,500')+'</button></div>');
   }
   grid.innerHTML=cards.length?cards.join(''):'<div class="alert alert-info" style="grid-column:1/-1">You\'re on our Monthly Plan — unlimited consultations, no need for Pay-Per-Consultation. Thank you for being a TalkDoc member!</div>';
 }
@@ -2720,11 +2698,11 @@ async function disableAutoDebit(){
 // Turns ON auto-debit for a manual (non-recurring) Monthly Plan subscriber.
 // Important: Paystack has no way to convert an existing one-time payment into
 // a recurring one retroactively — turning this on means processing a fresh
-// ₦10,000 charge right now (extending the plan another month) and attaching
+// ₦5,000 charge right now (extending the plan another month) and attaching
 // the recurring plan code to THAT charge, same as subscribing for the first
 // time. The patient is told this plainly before paying.
 async function enableAutoDebit(){
-  if(!confirm('To turn on auto-debit, we\'ll process a fresh ₦10,000 charge now (extending your plan another month) and save your card for automatic monthly renewal after that. Continue?'))return;
+  if(!confirm('To turn on auto-debit, we\'ll process a fresh ₦5,000 charge now (extending your plan another month) and save your card for automatic monthly renewal after that. Continue?'))return;
   openPaymentModal('monthly');
 }
 // ============ UNREAD MESSAGE BADGE ============
@@ -3771,17 +3749,22 @@ async function saveNotes(){
   S.messages[tid].push({from:'doctor',name:c.doctorName,text:msg,time:new Date().toISOString(),consultationId:aNid});
   if(sbReady()){
     try{
+      // Send the final message FIRST, while the consultation is still open —
+      // the database now only allows sending into a consultation that's
+      // still pending/active (see consultations_messages_rls_lockdown.sql),
+      // so this message would be rejected if sent after the status below.
+      const {error:msgErr}=await sb.from('messages').insert({thread_id:tid,sender_role:'doctor',sender_name:c.doctorName,text:msg,consultation_id:aNid});
+      if(msgErr){ console.log('Could not send final message:',msgErr); alert('Could not send the final message. Please try again.'); return; }
       // Status is the critical part — it's what actually closes the
       // consultation and blocks further messaging. Update it on its own
-      // first so a problem with the notes/prescription/referral columns
+      // so a problem with the notes/prescription/referral columns
       // (as just happened — they didn't exist in the database at all)
       // can never silently prevent the consultation from actually closing.
       const {error:statusErr}=await sb.from('consultations').update({status:'completed'}).eq('id',aNid);
-      if(statusErr){ console.log('Could not close consultation:',statusErr); alert('Could not close this consultation. Please try again or contact support.'); return; }
+      if(statusErr){ console.log('Could not close consultation:',statusErr); alert('Message sent, but could not close this consultation. Please try again or contact support.'); return; }
       try{
         await sb.from('consultations').update({notes:c.notes,prescription:c.prescription,referral:c.referral}).eq('id',aNid);
       }catch(e){ console.log('Consultation closed, but could not save notes/prescription/referral:',e); }
-      await sb.from('messages').insert({thread_id:tid,sender_role:'doctor',sender_name:c.doctorName,text:msg,consultation_id:aNid});
     }catch(e){ console.log('Could not save completed notes to Supabase:',e); }
   } else { sv(); }
   closeModal('notes');showSuccess('Consultation Completed!','Notes saved and patient notified.','✅');lDH();
@@ -4177,7 +4160,7 @@ async function submitDoctorApp(){
 }
 
 const PP='1. Introduction|TalkDoc is a digital healthcare platform. We respect your privacy and are committed to protecting your personal information in accordance with Nigerian data protection laws. By using TalkDoc, you agree to this policy.||2. Information We Collect|Personal: Name, email, phone, date of birth, gender, address, login details. Health: Symptoms, history, diagnoses, medications, allergies, consultations, notes, referrals, uploaded reports (treated strictly confidential). Payment: Plan info, payment confirmations, references (card details not stored). Technical: Device/browser info, IP address, login activity.||3. How We Use Your Information|• Provide healthcare: connect patients with doctors, facilitate consultations, maintain records. • Improve platform functionality. • Manage accounts, verify identity, manage subscriptions. • Send reminders, notifications, and important healthcare messages.||4. Medical Confidentiality|Your medical information will not be shared with employers, insurers, family, or others without consent, except where required by Nigerian law, to protect life or safety, or for legitimate healthcare purposes.||5. Doctor Access|When you request a consultation, your information may be viewed by the assigned doctor. Doctors maintain professional confidentiality. Specialists access relevant information only when referred. Only necessary information is shared.||6. Data Sharing|We share information with healthcare professionals for consultations and with service providers (hosting, payment, communication). We may disclose information when required by Nigerian courts, regulators, or law enforcement. We do not sell your personal information.||7. Security & Retention|We use access controls, authentication, encryption, and secure storage. No online system guarantees absolute security. Users must protect their login details. We retain data only as long as necessary for healthcare, legal compliance, and dispute resolution.||8. Your Rights|You may request: access to your data, correction of inaccuracies, deletion of certain data, withdrawal of consent. Email: talkdoc26@gmail.com||9. Children|TalkDoc is not intended for unsupervised use by children. Users under the age of consent should use the platform with parental or guardian involvement.||10. Changes|We may update this Privacy Policy from time to time. Users will be notified of significant changes.';
-const TT='1. Acceptance|By using TalkDoc, you agree to these Terms and Conditions. If you do not agree, discontinue use of the platform.||2. Description of Service|TalkDoc allows users to register accounts, subscribe to healthcare plans, communicate with doctors, and receive healthcare guidance. TalkDoc is a technology platform connecting patients and healthcare professionals.||3. Medical Disclaimer ⚠️|TalkDoc does not replace emergency medical services. Seek immediate physical medical attention for emergencies: severe injuries, life-threatening symptoms, or urgent hospital conditions. Online consultation may not suit every condition. Doctors may recommend physical examination, lab tests, imaging, or referral when necessary.||4. Doctor Relationship|Doctors using TalkDoc provide professional medical services independently. TalkDoc facilitates communication but does not guarantee medical outcomes. Doctors remain responsible for their professional decisions.||5. Subscription Terms|Monthly Plan: ₦10,000/month (unlimited consultations). Pay Per Consultation: ₦5,000 (single consultation, no monthly commitment). Specialist consultations may attract additional charges.||6. Payments & Refunds|Payments must be made through approved channels. Subscriptions activate after successful payment verification. Refund requests are considered based on service usage, payment errors, and Nigerian consumer protection laws.||7. User Responsibilities|Users agree to: provide accurate information, maintain account security, not impersonate others, not misuse medical services, and not share another person medical information without authorization.||8. Prohibited Activities|Users must not: abuse doctors or staff, submit intentionally false medical information, attempt unauthorized access, or use TalkDoc for any illegal purpose.||9. Limitation of Liability|TalkDoc is not responsible for: independent doctors medical decisions, internet/network delays, incorrect user-provided information, or outcomes from failure to follow medical advice.||10. Account Suspension|TalkDoc may suspend accounts where users violate these terms, engage in fraud, or threaten platform safety.||11. Governing Law|These Terms are governed by the laws of the Federal Republic of Nigeria. Disputes shall first attempt resolution through good-faith negotiation.||12. Contact|TalkDoc · Email: talkdoc26@gmail.com';
+const TT='1. Acceptance|By using TalkDoc, you agree to these Terms and Conditions. If you do not agree, discontinue use of the platform.||2. Description of Service|TalkDoc allows users to register accounts, subscribe to healthcare plans, communicate with doctors, and receive healthcare guidance. TalkDoc is a technology platform connecting patients and healthcare professionals.||3. Medical Disclaimer ⚠️|TalkDoc does not replace emergency medical services. Seek immediate physical medical attention for emergencies: severe injuries, life-threatening symptoms, or urgent hospital conditions. Online consultation may not suit every condition. Doctors may recommend physical examination, lab tests, imaging, or referral when necessary.||4. Doctor Relationship|Doctors using TalkDoc provide professional medical services independently. TalkDoc facilitates communication but does not guarantee medical outcomes. Doctors remain responsible for their professional decisions.||5. Subscription Terms|Monthly Plan: ₦5,000/month (unlimited consultations). Pay Per Consultation: ₦2,500 (single consultation, no monthly commitment). Specialist consultations may attract additional charges.||6. Payments & Refunds|Payments must be made through approved channels. Subscriptions activate after successful payment verification. Refund requests are considered based on service usage, payment errors, and Nigerian consumer protection laws.||7. User Responsibilities|Users agree to: provide accurate information, maintain account security, not impersonate others, not misuse medical services, and not share another person medical information without authorization.||8. Prohibited Activities|Users must not: abuse doctors or staff, submit intentionally false medical information, attempt unauthorized access, or use TalkDoc for any illegal purpose.||9. Limitation of Liability|TalkDoc is not responsible for: independent doctors medical decisions, internet/network delays, incorrect user-provided information, or outcomes from failure to follow medical advice.||10. Account Suspension|TalkDoc may suspend accounts where users violate these terms, engage in fraud, or threaten platform safety.||11. Governing Law|These Terms are governed by the laws of the Federal Republic of Nigeria. Disputes shall first attempt resolution through good-faith negotiation.||12. Contact|TalkDoc · Email: talkdoc26@gmail.com';
 function buildPolicy(raw){return raw.split('||').map(s=>{const[h,...b]=s.split('|');return '<div class="policy-h">'+h+'</div><p>'+b.join('|')+'</p>';}).join('');}
 function renderPolicy(raw,elId){document.getElementById(elId).innerHTML=buildPolicy(raw);}
 
@@ -4609,7 +4592,7 @@ async function brevoSendNewsletterWelcome(email, name){
             <p style="margin:6px 0;color:#1a2332">🎁 Exclusive resources and early access to new features</p>
             <p style="margin:6px 0;color:#1a2332">📢 Occasional updates on TalkDoc news and offers</p>
           </div>
-          <p style="color:#4a5568;font-size:15px;line-height:1.75">While you're here — did you know you can also consult a verified doctor from home on TalkDoc? Personal plans start at just ₦5,000/month.</p>
+          <p style="color:#4a5568;font-size:15px;line-height:1.75">While you're here — did you know you can also consult a verified doctor from home on TalkDoc? Monthly plans start at just ₦5,000/month, or pay ₦2,500 per consultation with no commitment.</p>
           <div style="text-align:center;margin:28px 0">
             <a href="https://talkdoc.ng" style="background:#008181;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;display:inline-block">Explore TalkDoc →</a>
           </div>
@@ -4631,7 +4614,7 @@ async function brevoSendSubActivated(email, name, plan){
         subject:'Your TalkDoc Subscription is Active ✅',
         htmlContent:`<div style="font-family:Segoe UI,sans-serif;max-width:600px;margin:0 auto;padding:32px 24px">
           <h1 style="color:#008181">Subscription Activated! 🎉</h1>
-          <p style="color:#4a5568;font-size:15px;line-height:1.75">Hi ${name.split(' ')[0]}, your <strong>${plan==='single'?'Pay Per Consultation (₦5,000)':plan==='personal'?'Personal Plan (₦5,000/month)':plan==='family'?'Family Plan (₦10,000/month)':'Monthly Plan (₦10,000/month)'}</strong> is now active.</p>
+          <p style="color:#4a5568;font-size:15px;line-height:1.75">Hi ${name.split(' ')[0]}, your <strong>${plan==='single'?'Pay Per Consultation (₦2,500)':plan==='personal'?'Personal Plan (₦5,000/month)':plan==='family'?'Family Plan (₦10,000/month)':'Monthly Plan (₦5,000/month)'}</strong> is now active.</p>
           <div style="background:#d1fae5;border-radius:12px;padding:20px;margin:20px 0">
             <p style="color:#065f46;font-weight:700;margin:0">✅ ${plan==='single'?'You can now start your consultation with one of our doctors!':'You can now start unlimited consultations with our doctors!'}</p>
           </div>
@@ -4659,7 +4642,7 @@ async function brevoSendTrialActivated(email, name, trialEndISO){
           <div style="background:#d1fae5;border-radius:12px;padding:20px;margin:20px 0">
             <p style="color:#065f46;font-weight:700;margin:0">✅ Your trial ends on ${trialEndStr}</p>
           </div>
-          <p style="color:#4a5568;font-size:14px;line-height:1.75">Log in and click "Start Consultation" to use your free consultation. To keep consulting doctors after that — or once your trial ends — subscribe to our Monthly Plan (₦10,000/month, unlimited) or pay ₦5,000 per consultation any time.</p>
+          <p style="color:#4a5568;font-size:14px;line-height:1.75">Log in and click "Start Consultation" to use your free consultation. To keep consulting doctors after that — or once your trial ends — subscribe to our Monthly Plan (₦5,000/month, unlimited) or pay ₦2,500 per consultation any time.</p>
           <div style="margin-top:28px;padding-top:20px;border-top:1px solid #e8ecef;font-size:12px;color:#b0bec5">
             TalkDoc · talkdoc26@gmail.com
           </div>
@@ -4685,8 +4668,8 @@ async function brevoSendTrialEnded(email, name){
             <p style="color:#92400e;font-weight:700;margin:0">⏳ Subscribe now to reactivate your access</p>
           </div>
           <ul style="color:#4a5568;font-size:14px;line-height:1.9;padding-left:20px">
-            <li><strong>Monthly Plan</strong> — ₦10,000/month (unlimited consultations)</li>
-            <li><strong>Pay Per Consultation</strong> — ₦5,000 (single consultation, no commitment)</li>
+            <li><strong>Monthly Plan</strong> — ₦5,000/month (unlimited consultations)</li>
+            <li><strong>Pay Per Consultation</strong> — ₦2,500 (single consultation, no commitment)</li>
           </ul>
           <div style="text-align:center;margin:28px 0">
             <a href="https://talkdoc.ng" style="background:#008181;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;display:inline-block">Subscribe Now →</a>
@@ -5461,7 +5444,7 @@ async function hasActiveSubscription(userId){
   // patient has "completed" (via Add Notes), this closes again until they buy
   // a new credit or plan, which lets them start a fresh consultation.
   // Previously this checked "has this person EVER had any approved payment",
-  // which meant a single ₦5,000 consult from months ago granted permanent,
+  // which meant a single ₦2,500 consult from months ago granted permanent,
   // unlimited free messaging forever — that loophole is what this replaces.
   if(sbReady()){
     try{
@@ -5504,7 +5487,7 @@ async function getConsultationCount(userId){
   return S.consultations.filter(c=>c.patientId===userId).length;
 }
 
-// How many paid Pay-Per-Consultation (₦5,000) credits this patient currently
+// How many paid Pay-Per-Consultation (₦2,500) credits this patient currently
 // has unused. Only ever changed via the grant_consult_credit /
 // consume_consult_credit database functions — never editable directly from
 // the client, so nobody can grant themselves free consultations via devtools.
@@ -5523,10 +5506,10 @@ async function getConsultCredits(userId){
 // Gate for STARTING a new consultation specifically (as opposed to hasActiveSubscription,
 // which governs ongoing access like messaging/community for an existing consultation).
 // Three ways in, checked in order:
-//  1. Monthly Plan (₦10,000/mo, or a legacy Personal/Family plan from before the
+//  1. Monthly Plan (₦5,000/mo, or a legacy Personal/Family plan from before the
 //     pricing change) — unlimited, always allowed.
 //  2. The free trial's one consultation — allowed once, while the 3-day trial is active.
-//  3. A paid Pay-Per-Consultation (₦5,000) credit — allowed once per credit purchased.
+//  3. A paid Pay-Per-Consultation (₦2,500) credit — allowed once per credit purchased.
 async function canStartNewConsultation(userId){
   if(!userId) return {allowed:false, reason:'none'};
   if(await getActiveMonthlyPayment(userId)) return {allowed:true, reason:'paid'};
@@ -5626,7 +5609,7 @@ function goToMyDashboard(){
 async function checkSubThenConsult(){
   const check=await canStartNewConsultation(S.currentUser?.id);
   if(!check.allowed){
-    const msg=check.reason==='trial_used'?'You\'ve used your free trial consultation. Subscribe monthly (₦10,000) or pay ₦5,000 per consultation.':'Please subscribe monthly (₦10,000) or pay ₦5,000 for a single consultation.';
+    const msg=check.reason==='trial_used'?'You\'ve used your free trial consultation. Subscribe monthly (₦5,000) or pay ₦2,500 per consultation.':'Please subscribe monthly (₦5,000) or pay ₦2,500 for a single consultation.';
     showSuccess('Subscription Required',msg,'🔒');
     setTimeout(()=>{closeModal('success');showDashSection('patient','subscription');},2000);
     return;
