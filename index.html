@@ -1621,7 +1621,7 @@ html{transition:background-color .35s ease;}
 <!-- MODALS -->
 <div class="modal-overlay hidden" id="modal-login"><div class="modal"><span class="modal-close" onclick="closeModal('login')">×</span><h2>Welcome Back 👋</h2><p class="subtitle">Login to your TalkDoc account</p><div id="loginAlert"></div><div class="form-group"><label>Email or Phone</label><input id="loginEmail" type="text" placeholder="Enter email or phone" autocomplete="off"></div><div class="form-group"><label>Password</label><div class="pw-wrap"><input id="loginPassword" type="password" placeholder="Enter password" autocomplete="off"><button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Show password"><svg class="ico"><use href="#icon-eye"/></svg></button></div></div><div style="text-align:right;margin-top:-10px;margin-bottom:4px"><a style="color:var(--primary);cursor:pointer;font-size:13px;font-weight:600" onclick="openForgotPassword()">Forgot password?</a></div><div class="form-group" style="display:flex;align-items:center;gap:8px;margin-top:-4px"><input type="checkbox" id="rememberMe" style="width:auto;accent-color:var(--primary)"><label for="rememberMe" style="margin:0;font-size:13px;font-weight:500;color:var(--text2)">Remember me on this device</label></div><button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="doLogin()">Login →</button><div class="auth-switch">No account? <a onclick="switchModal('login','register')">Register here</a></div></div></div>
 
-<div class="modal-overlay hidden" id="modal-register"><div class="modal"><span class="modal-close" onclick="closeModal('register')">×</span><h2>Create Account 🎉</h2><p class="subtitle">Sign up to start your healthcare journey</p><div id="registerAlert"></div><div class="form-row"><div class="form-group"><label>Full Name</label><input id="regName" type="text" placeholder="Your full name"></div><div class="form-group"><label>Phone Number</label><input id="regPhone" type="tel" placeholder="08012345678"></div></div><div class="form-group"><label>Email Address</label><input id="regEmail" type="email" placeholder="Enter email"></div><div class="form-row"><div class="form-group"><label>Date of Birth</label><input id="regDob" type="date"></div><div class="form-group"><label>Gender</label><select id="regGender"><option value="">Select gender</option><option value="Male">Male</option><option value="Female">Female</option></select></div></div><div class="form-group"><label>Nationality</label><select id="regNationality" onchange="document.getElementById('regNationalityOther').style.display=this.value==='Other'?'block':'none'"><option value="">Select nationality</option><option value="Nigerian" selected>Nigerian</option><option value="Ghanaian">Ghanaian</option><option value="Kenyan">Kenyan</option><option value="South African">South African</option><option value="Cameroonian">Cameroonian</option><option value="British">British</option><option value="American">American</option><option value="Canadian">Canadian</option><option value="Other">Other</option></select><input id="regNationalityOther" type="text" placeholder="Please specify your nationality" style="display:none;margin-top:8px"></div><div class="form-row"><div class="form-group"><label>Password</label><div class="pw-wrap"><input id="regPassword" type="password" placeholder="Create password"><button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Show password"><svg class="ico"><use href="#icon-eye"/></svg></button></div></div><div class="form-group"><label>Confirm Password</label><div class="pw-wrap"><input id="regPassword2" type="password" placeholder="Confirm password"><button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Show password"><svg class="ico"><use href="#icon-eye"/></svg></button></div></div></div><div class="form-group" style="display:flex;align-items:flex-start;gap:8px;margin-top:-4px"><input type="checkbox" id="regAgreeTerms" style="width:auto;margin-top:3px;accent-color:var(--primary)"><label for="regAgreeTerms" style="margin:0;font-size:13px;font-weight:500;color:var(--text2);line-height:1.5">I agree to TalkDoc's <a onclick="event.preventDefault();viewPolicyDuringSignup('privacy')" style="color:var(--primary);cursor:pointer;font-weight:600">Privacy Policy</a> and <a onclick="event.preventDefault();viewPolicyDuringSignup('terms')" style="color:var(--primary);cursor:pointer;font-weight:600">Terms &amp; Conditions</a></label></div><button class="btn btn-primary" style="width:100%" onclick="doRegister()">Create Account →</button><div class="auth-switch">Already registered? <a onclick="switchModal('register','login')">Login here</a></div></div></div>
+<div class="modal-overlay hidden" id="modal-register"><div class="modal"><span class="modal-close" onclick="closeModal('register')">×</span><h2>Create Account 🎉</h2><p class="subtitle">Sign up to start your healthcare journey</p><div id="registerAlert"></div><div class="form-group"><label>Full Name</label><input id="regName" type="text" placeholder="Your full name"></div><div class="form-group"><label>Email Address</label><input id="regEmail" type="email" placeholder="Enter email"></div><div class="form-group"><label>Phone Number</label><input id="regPhone" type="tel" placeholder="08012345678"></div><div class="form-group"><label>Password</label><div class="pw-wrap"><input id="regPassword" type="password" placeholder="Create password"><button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Show password"><svg class="ico"><use href="#icon-eye"/></svg></button></div></div><div class="form-group" style="display:flex;align-items:flex-start;gap:8px;margin-top:-4px"><input type="checkbox" id="regAgreeTerms" style="width:auto;margin-top:3px;accent-color:var(--primary)"><label for="regAgreeTerms" style="margin:0;font-size:13px;font-weight:500;color:var(--text2);line-height:1.5">I agree to TalkDoc's <a onclick="event.preventDefault();viewPolicyDuringSignup('privacy')" style="color:var(--primary);cursor:pointer;font-weight:600">Privacy Policy</a> and <a onclick="event.preventDefault();viewPolicyDuringSignup('terms')" style="color:var(--primary);cursor:pointer;font-weight:600">Terms &amp; Conditions</a></label></div><button class="btn btn-primary" style="width:100%" onclick="doRegister()">Create Account →</button><div class="auth-switch">Already registered? <a onclick="switchModal('register','login')">Login here</a></div></div></div>
 
 <!-- Newsletter signup popup (shown once, shortly after the homepage finishes loading) -->
 <div class="modal-overlay hidden" id="modal-newsletterPopup"><div class="modal" style="max-width:420px;text-align:center;">
@@ -1639,33 +1639,7 @@ html{transition:background-color .35s ease;}
   <div style="margin-top:14px;"><a onclick="dismissNewsletterPopup()" style="font-size:13px;color:var(--text2);cursor:pointer;text-decoration:underline">No thanks, maybe later</a></div>
 </div></div>
 
-<div class="modal-overlay hidden" id="modal-otp">
-<div class="modal" style="text-align:center;max-width:420px">
-  <span class="modal-close" onclick="closeModal('otp')">×</span>
-  <div style="width:64px;height:64px;background:linear-gradient(135deg,var(--primary-light),rgba(62,204,241,.2));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--primary)"><svg class="ico" style="stroke-width:1.4"><use href="#icon-mail"/></svg></div>
-  <h2>Check Your Email</h2>
-  <p class="subtitle">We sent a 6-digit verification code to</p>
-  <div style="font-weight:700;color:var(--teal);font-size:14px;margin-bottom:20px" id="otpEmailHint">your email</div>
-  <div class="otp-inputs">
-    <input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="1" class="otp-digit">
-    <input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="1" class="otp-digit">
-    <input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="1" class="otp-digit">
-    <input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="1" class="otp-digit">
-    <input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="1" class="otp-digit">
-    <input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="1" class="otp-digit">
-  </div>
-  <div id="otpError" style="display:none;color:var(--danger);font-size:13px;margin:8px 0 4px;font-weight:600"></div>
-  <div style="font-size:13px;color:var(--text2);margin-bottom:6px">Code expires in <strong id="otpTimer">10:00</strong></div>
-  <button class="btn btn-primary btn-lg" style="width:100%;margin-bottom:14px" onclick="verifyOTP()">Verify Email →</button>
-  <div style="font-size:13px;color:var(--text2)">
-    Didn't receive it? Check your spam folder or
-    <a id="resendBtn" style="color:var(--primary);cursor:pointer;font-weight:600" onclick="resendOTP()">Resend Code</a>
-  </div>
-  <div style="font-size:12px;color:var(--text2);margin-top:10px;opacity:.7">
-    Wrong email? <a style="color:var(--primary);cursor:pointer" onclick="closeModal('otp');openModal('register')">Go back</a>
-  </div>
-</div>
-</div>
+
 
 <div class="modal-overlay hidden" id="modal-payment">
 <div class="modal">
@@ -1960,127 +1934,40 @@ function showAlert(id,msg,t='error'){const el=document.getElementById(id);if(el)
 
 // AUTH
 async function doRegister(){
-  const name=document.getElementById('regName').value.trim(),phone=document.getElementById('regPhone').value.trim(),email=document.getElementById('regEmail').value.trim().toLowerCase(),pass=document.getElementById('regPassword').value,pass2=document.getElementById('regPassword2').value;
-  const dob=document.getElementById('regDob').value;
-  const gender=document.getElementById('regGender').value;
-  const nationalitySel=document.getElementById('regNationality').value;
-  const nationality=(nationalitySel==='Other'?document.getElementById('regNationalityOther').value.trim():nationalitySel);
-  if(!name||!phone||!email||!pass)return showAlert('registerAlert','Please fill all fields');
-  if(!dob) return showAlert('registerAlert','Please enter your date of birth');
-  if(new Date(dob) > new Date()) return showAlert('registerAlert','Date of birth cannot be in the future');
-  if(!gender) return showAlert('registerAlert','Please select your gender');
-  if(!nationality) return showAlert('registerAlert','Please enter your nationality');
-  if(pass!==pass2)return showAlert('registerAlert','Passwords do not match');
+  const name=document.getElementById('regName').value.trim(),email=document.getElementById('regEmail').value.trim().toLowerCase(),phone=document.getElementById('regPhone').value.trim(),pass=document.getElementById('regPassword').value;
+  if(!name||!email||!phone||!pass)return showAlert('registerAlert','Please fill all fields');
   if(pass.length<6)return showAlert('registerAlert','Password must be at least 6 characters');
   if(!document.getElementById('regAgreeTerms').checked)return showAlert('registerAlert','Please agree to the Privacy Policy and Terms & Conditions to continue');
   // Real check against the database (not just this browser's local cache) —
-  // catches duplicates immediately instead of after the whole OTP flow.
-  showAlert('registerAlert','Checking email...','info');
+  // catches duplicates immediately with a clear message.
+  showAlert('registerAlert','Creating your account...','info');
   if(sbReady()){
     try{
       const {data:exists,error}=await sb.rpc('email_exists',{check_email:email});
       if(!error && exists) return showAlert('registerAlert','This email is already registered. Please login instead.');
     }catch(e){ /* if the check itself fails, fall through — register_patient still catches duplicates as a final safety net */ }
   }
-  // Store pending user (not saved yet — waits for OTP verification)
-  window._pendingUser={name,phone,email,password:pass,agreedToTermsAt:new Date().toISOString(),dateOfBirth:dob,gender,nationality};
-  showAlert('registerAlert','Sending verification code to '+email+'...','info');
-  sendOTPEmail(name,email).then(sent=>{
-    if(sent){
-      document.getElementById('registerAlert').innerHTML='';
-      closeModal('register');
-      // Update OTP modal with email hint
-      document.getElementById('otpEmailHint').textContent=email;
-      openModal('otp');
-    } else {
-      showAlert('registerAlert','Could not send verification email. Please check your email address and try again.');
-    }
-  });
-}
-
-// Generate a random 6-digit OTP
-let _currentOTP='';
-let _otpExpiry=0;
-
-function generateOTP(){
-  _currentOTP=Math.floor(100000+Math.random()*900000).toString();
-  _otpExpiry=Date.now()+(10*60*1000); // expires in 10 mins
-  return _currentOTP;
-}
-
-async function sendOTPEmail(name, email){
-  const otp = generateOTP();
-  window._sentOTP = otp;
-  try{
-    const res = await brevoCall('smtp/email',{
-      to:[{email,name}],
-      templateId: BREVO_TEMPLATE_OTP,
-      params:{ name: name.split(' ')[0], otp }
-    });
-    return res.ok;
-  } catch(e){
-    console.log('OTP email error:', e);
-    showAlert('registerAlert', 'Could not send the verification email. Please check your connection and try again.');
-    return false;
-  }
-}
-async function verifyOTP(){
-  const d=[...document.querySelectorAll('.otp-digit')].map(i=>i.value);
-  if(d.some(x=>!x))return showOtpError('Please enter all 6 digits');
-  const entered=d.join('');
-  // Check expiry
-  if(Date.now()>_otpExpiry){
-    showOtpError('This code has expired. Please go back and register again.');
-    return;
-  }
-  // Check code
-  if(entered!==_currentOTP){
-    showOtpError('Incorrect code. Please check your email and try again.');
-    // Shake the inputs
-    document.querySelector('.otp-inputs').style.animation='shake .4s ease';
-    setTimeout(()=>document.querySelector('.otp-inputs').style.animation='',400);
-    return;
-  }
-  // OTP correct — create the patient's real Supabase Auth account + profile row
-  const u=window._pendingUser;
-  if(!u){showOtpError('Session expired. Please register again.');return;}
+  if(!sbReady()){ showAlert('registerAlert','Supabase is not configured.'); return; }
   let newUser;
-  if(sbReady()){
-    try{
-      const {data,error}=await sb.rpc('register_patient',{
-        p_name:u.name, p_phone:u.phone, p_email:u.email, p_password:u.password, p_agreed_to_terms_at:u.agreedToTermsAt,
-        p_date_of_birth:u.dateOfBirth, p_gender:u.gender, p_nationality:u.nationality
-      });
-      if(error){ showOtpError(error.message.includes('already registered')?'This email is already registered. Please login instead.':'Could not create your account: '+error.message); return; }
-      const row=Array.isArray(data)?data[0]:data;
-      // Immediately sign in with the account we just created, so a real Supabase session is established
-      const {error:signInErr}=await sb.auth.signInWithPassword({email:u.email,password:u.password});
-      if(signInErr){ showOtpError('Account created, but could not sign you in automatically. Please login.'); closeModal('otp'); openModal('login'); return; }
-      newUser={id:row.id,name:row.name,email:row.email,phone:row.phone,dateOfBirth:row.date_of_birth,gender:row.gender,nationality:row.nationality,role:'patient'};
-    }catch(e){ showOtpError('Could not create your account. Please try again.'); return; }
-  } else {
-    showOtpError('Supabase is not configured.'); return;
-  }
-  // The 3-day trial is now activated server-side, inside register_patient() itself
-  // (see register_patient_fixed.sql) — not from the browser. That's both more
-  // reliable (no dependency on RLS allowing a client-side update) and safer
-  // (nobody can extend their own trial by editing it from dev tools).
-  const trialEndISO=new Date(Date.now()+3*24*60*60*1000).toISOString(); // matches what the DB just set, for immediate display only
-  newUser.trialStart=new Date().toISOString(); newUser.trialEnd=trialEndISO;
+  try{
+    const {data,error}=await sb.rpc('register_patient',{
+      p_name:name, p_phone:phone, p_email:email, p_password:pass, p_agreed_to_terms_at:new Date().toISOString(),
+      p_date_of_birth:null, p_gender:null, p_nationality:null
+    });
+    if(error){ showAlert('registerAlert', error.message.includes('already registered')?'This email is already registered. Please login instead.':'Could not create your account: '+error.message); return; }
+    const row=Array.isArray(data)?data[0]:data;
+    // Immediately sign in with the account we just created, so a real Supabase session is established
+    const {error:signInErr}=await sb.auth.signInWithPassword({email,password:pass});
+    if(signInErr){ showAlert('registerAlert','Account created, but could not sign you in automatically. Please login.'); closeModal('register'); openModal('login'); return; }
+    newUser={id:row.id,name:row.name,email:row.email,phone:row.phone,dateOfBirth:row.date_of_birth,gender:row.gender,nationality:row.nationality,role:'patient'};
+  }catch(e){ showAlert('registerAlert','Could not create your account. Please try again.'); return; }
   S.users.push(newUser);S.currentUser=newUser;sv();
-  window._pendingUser=null;_currentOTP='';
-  closeModal('otp');
-  // Add to Brevo + our own subscriber list + send welcome & trial-activated emails
+  closeModal('register');
+  // Add to Brevo + our own subscriber list + send welcome email
   brevoAddContact(newUser.email,newUser.name);
   saveSubscriberToSupabase(newUser.name,newUser.email);
   brevoSendWelcome(newUser.email,newUser.name);
-  brevoSendTrialActivated(newUser.email,newUser.name,trialEndISO);
   loginAsPatient();
-}
-
-function showOtpError(msg){
-  const el=document.getElementById('otpError');
-  if(el){el.textContent=msg;el.style.display='block';}
 }
 let _loginFailCount=0;
 let _adminLoginFailCount=0;
@@ -2272,7 +2159,6 @@ window.addEventListener('load',()=>{
     else if(path==='/signup'||path==='/register'){ openModal('register'); }
     else if(path==='/'){ document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden')); }
   });
-  setupOTP();
   setTimeout(initReveal,350); // fires immediately, independent of any network calls below — the hero fade-in should never wait on data fetches unrelated to it
   const sv2=document.getElementById('severity');if(sv2)sv2.addEventListener('input',()=>document.getElementById('severityVal').textContent=sv2.value);
   window.addEventListener('scroll',()=>document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>20));
@@ -2359,28 +2245,6 @@ function initHeroParallax(){
     heroImg.style.transform='translate(0,0)';
   });
 }
-function setupOTP(){
-  const d=document.querySelectorAll('.otp-digit');
-  d.forEach((inp,i)=>{
-    inp.addEventListener('input',()=>{
-      // Strip anything that isn't a digit (belt-and-braces alongside inputmode/pattern above)
-      inp.value=inp.value.replace(/[^0-9]/g,'');
-      if(inp.value.length===1&&i<d.length-1)d[i+1].focus();
-    });
-    inp.addEventListener('keydown',(e)=>{
-      if(e.key==='Backspace'&&!inp.value&&i>0)d[i-1].focus();
-    });
-    inp.addEventListener('paste',(e)=>{
-      e.preventDefault();
-      const pasted=(e.clipboardData||window.clipboardData).getData('text').replace(/[^0-9]/g,'').slice(0,d.length);
-      if(!pasted)return;
-      d.forEach((box,j)=>{box.value=pasted[j]||'';});
-      const next=d[Math.min(pasted.length,d.length-1)];
-      if(next)next.focus();
-    });
-  });
-}
-
 // PAYMENT — Paystack
 const PAYSTACK_KEY = 'pk_live_0a9af3c69f31864db76b2ddc1d436a0df26f4e2f';
 // Auto-debit / recurring billing: create this Plan once in your Paystack
@@ -4523,7 +4387,6 @@ async function brevoCall(endpoint, payload){
 const BREVO_LIST_ID = 3;
 // TODO: replace these with the real template IDs shown in Brevo → Transactional → Templates
 // after you create each one there. Until then these emails will fail to send.
-const BREVO_TEMPLATE_OTP     = 4; // "OTP Verification" template
 const BREVO_TEMPLATE_WELCOME = 5; // "Welcome Email" template
 const BREVO_TEMPLATE_RESET   = 6; // "Password Reset" template
 const SENDER_EMAIL = 'talkdoc26@gmail.com';
@@ -5318,56 +5181,12 @@ function maybeShowNewsletterPopup(){
 }
 
 
-// OTP TIMER
-let _otpTimerInterval=null;
-function startOtpTimer(){
-  clearInterval(_otpTimerInterval);
-  let secs=600; // 10 minutes
-  const el=document.getElementById('otpTimer');
-  _otpTimerInterval=setInterval(()=>{
-    secs--;
-    if(secs<=0){clearInterval(_otpTimerInterval);if(el)el.textContent='Expired';return;}
-    const m=Math.floor(secs/60);const s=secs%60;
-    if(el) el.textContent=m+':'+(s<10?'0':'')+s;
-  },1000);
-}
-
-async function resendOTP(){
-  const u=window._pendingUser;
-  if(!u){showOtpError('Session expired. Please register again.');return;}
-  const btn=document.getElementById('resendBtn');
-  btn.textContent='Sending...';
-  // Clear inputs
-  document.querySelectorAll('.otp-digit').forEach(i=>i.value='');
-  document.getElementById('otpError').style.display='none';
-  const sent=await sendOTPEmail(u.name,u.email);
-  if(sent){
-    btn.textContent='Resend Code';
-    startOtpTimer();
-    const el=document.getElementById('otpError');
-    el.style.color='var(--success)';el.textContent='✅ New code sent! Check your email.';el.style.display='block';
-    setTimeout(()=>{el.style.display='none';el.style.color='var(--danger)';},4000);
-  } else {
-    btn.textContent='Resend Code';
-    showOtpError('Failed to resend. Please check your connection.');
-  }
-}
-
 // Start timer when OTP modal opens
 const __origOpenModal=window.openModal;
 window.openModal=function(n){
   if(n==='privacy')renderPolicy(PP,'privacyBody');
   if(n==='terms')renderPolicy(TT,'termsBody');
   __origOpenModal(n);
-  if(n==='otp'){
-    // Clear inputs & errors
-    document.querySelectorAll('.otp-digit').forEach(i=>i.value='');
-    const errEl=document.getElementById('otpError');
-    if(errEl) errEl.style.display='none';
-    startOtpTimer();
-    // Focus first digit
-    setTimeout(()=>document.querySelector('.otp-digit')?.focus(),300);
-  }
 };
 
 
@@ -5518,7 +5337,10 @@ async function canStartNewConsultation(userId){
   if(trial&&trial.onTrial&&count<1) return {allowed:true, reason:'trial'};
   const credits=await getConsultCredits(userId);
   if(credits>0) return {allowed:true, reason:'credit'};
-  return {allowed:false, reason: count>=1?'trial_used':'none'};
+  // Only call it "trial_used" if this patient genuinely ever had a trial —
+  // new signups (trial no longer granted) should just see the plain "you
+  // need a plan" message, not a confusing reference to a trial they never had.
+  return {allowed:false, reason: (trial && count>=1) ? 'trial_used' : 'none'};
 }
 
 function checkSubThenMessages(){

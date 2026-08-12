@@ -5,3 +5,14 @@
 # (and who hasn't subscribed) — see netlify/functions/trial-expiry-check.js
 [functions."trial-expiry-check"]
   schedule = "@daily"
+
+# Runs once a day: sends renewal reminders 3 days before a Monthly Plan is due,
+# and notifies manual (non-auto-debit) subscribers once their plan has expired.
+# See netlify/functions/subscription-reminder-check.js
+[functions."subscription-reminder-check"]
+  schedule = "@daily"
+
+# Runs every 6 hours: closes any consultation with no message activity in the
+# last 48 hours. See netlify/functions/consultation-auto-close.js
+[functions."consultation-auto-close"]
+  schedule = "0 */6 * * *"
