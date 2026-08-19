@@ -76,11 +76,11 @@ exports.handler = async function () {
               <p style="color:#92400e;font-weight:700;margin:0">⏳ Subscribe now to reactivate your access</p>
             </div>
             <ul style="color:#4a5568;font-size:14px;line-height:1.9;padding-left:20px">
-              <li><strong>Personal Plan</strong> — ₦5,000/month (1 person)</li>
-              <li><strong>Family Plan</strong> — ₦10,000/month (up to 5 members)</li>
+              <li><strong>Monthly Plan</strong> — ₦10,000/month (unlimited consultations)</li>
+              <li><strong>Pay Per Consultation</strong> — ₦5,000 (single consultation, no commitment)</li>
             </ul>
             <div style="text-align:center;margin:28px 0">
-              <a href="https://talkdoc.com" style="background:#008181;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;display:inline-block">Subscribe Now →</a>
+              <a href="https://talkdoc.ng" style="background:#008181;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;display:inline-block">Subscribe Now →</a>
             </div>
             <div style="margin-top:28px;padding-top:20px;border-top:1px solid #e8ecef;font-size:12px;color:#b0bec5">
               TalkDoc · talkdoc26@gmail.com

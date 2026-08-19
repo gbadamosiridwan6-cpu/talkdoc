@@ -15,7 +15,7 @@
 //   3. In Paystack Dashboard → Settings → API Keys & Webhooks, set the
 //      "Webhook URL" to: https://YOUR-SITE.netlify.app/.netlify/functions/paystack-webhook
 //   4. Create your two recurring Plans in Paystack Dashboard → Payments → Plans
-//      (Personal ₦5,000/monthly, Family ₦10,000/monthly) and paste their plan_code
+//      (Monthly, ₦10,000/monthly) and paste the plan_code
 //      values into PAYSTACK_PLAN_CODES in index.html — that's what makes a payment
 //      a subscription in the first place.
 //
@@ -110,7 +110,9 @@ exports.handler = async function (event) {
       if (!data.plan) return { statusCode: 200, body: 'Not a subscription charge, skipping' }; // one-off payments, e.g. specialist bookings
 
       const planCode = data.plan.plan_code;
-      const planName = data.plan.name?.toLowerCase().includes('family') ? 'family' : 'personal';
+      // Only the Monthly Plan ever recurs — Pay-Per-Consultation purchases have no
+      // Paystack plan code attached, so they can never generate a renewal charge.
+      const planName = 'monthly';
       const customerEmail = data.customer?.email;
 
       // Find the user this subscription belongs to via a prior payment with the same subscription/customer.
@@ -139,7 +141,7 @@ exports.handler = async function (event) {
           subject: 'TalkDoc Subscription Renewed ✅',
           htmlContent: `<div style="font-family:Segoe UI,sans-serif;max-width:600px;margin:0 auto;padding:32px 24px">
             <h1 style="color:#008181">Subscription Renewed</h1>
-            <p style="color:#4a5568;font-size:15px;line-height:1.75">Hi ${u.name.split(' ')[0]}, your TalkDoc ${planName==='family'?'Family':'Personal'} Plan was automatically renewed. Your card was charged ₦${(data.amount/100).toLocaleString()}.</p>
+            <p style="color:#4a5568;font-size:15px;line-height:1.75">Hi ${u.name.split(' ')[0]}, your TalkDoc Monthly Plan was automatically renewed. Your card was charged ₦${(data.amount/100).toLocaleString()}.</p>
             <p style="color:#4a5568;font-size:14px;line-height:1.75">Next renewal: ${new Date(nextPaymentDate).toLocaleDateString('en-NG',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}.</p>
           </div>`,
         });
