@@ -24,7 +24,7 @@
 // ebook-common-skin-diseases.pdf sits at the root of your deployed site
 // (same level as index.html) — update it if either of those isn't true.
 
-const SENDER_EMAIL = 'talkdoc26@gmail.com';
+const SENDER_EMAIL = 'noreply@talkdoc.ng';
 const SENDER_NAME = 'TalkDoc';
 const TEAM_EMAIL = 'talkdoc26@gmail.com'; // where new-lead notifications go
 const BREVO_LIST_ID = 3; // same list your newsletter/registration signups already go to

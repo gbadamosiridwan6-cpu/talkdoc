@@ -14,7 +14,7 @@
 // Required Netlify environment variables (same ones trial-expiry-check.js uses):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, BREVO_API_KEY
 
-const SENDER_EMAIL = 'talkdoc26@gmail.com';
+const SENDER_EMAIL = 'noreply@talkdoc.ng';
 const SENDER_NAME = 'TalkDoc';
 const UNLIMITED_PLANS = ['monthly', 'personal', 'family']; // personal/family = legacy plans, still treated as Monthly-equivalent
 

@@ -32,7 +32,7 @@
 
 const crypto = require('crypto');
 
-const SENDER_EMAIL = 'talkdoc26@gmail.com';
+const SENDER_EMAIL = 'noreply@talkdoc.ng';
 const SENDER_NAME = 'TalkDoc';
 
 async function sbFetch(path, { method = 'GET', body, SUPABASE_URL, SERVICE_KEY } = {}) {

@@ -17,7 +17,7 @@
 //                               all users, bypassing row-level security.
 //   BREVO_API_KEY              — same key used by netlify/functions/brevo-proxy.js
 
-const SENDER_EMAIL = 'talkdoc26@gmail.com';
+const SENDER_EMAIL = 'noreply@talkdoc.ng';
 const SENDER_NAME = 'TalkDoc';
 
 exports.handler = async function () {
