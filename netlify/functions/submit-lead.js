@@ -110,18 +110,21 @@ exports.handler = async function (event) {
           body: JSON.stringify({
             sender: { name: SENDER_NAME, email: SENDER_EMAIL },
             to: [{ email, name }],
-            subject: 'Your Free eBook: Common Skin Diseases 📘',
-            htmlContent: `<div style="font-family:Segoe UI,sans-serif;max-width:600px;margin:0 auto;padding:32px 24px">
-              <h1 style="color:#008181">Here's Your Free eBook!</h1>
-              <p style="color:#4a5568;font-size:15px;line-height:1.75">Hi ${name.split(' ')[0]}, thanks for reaching out to TalkDoc about your skin rash. As promised, here's your free copy of our guide, <strong>Common Skin Diseases: A Home Guide</strong> — covering symptoms, home care tips, and when to see a doctor for six common skin conditions.</p>
-              <div style="text-align:center;margin:28px 0">
-                <a href="${EBOOK_URL}" style="background:#008181;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:14px;display:inline-block">Download Your eBook →</a>
-              </div>
-              <p style="color:#4a5568;font-size:14px;line-height:1.75">A member of our customer care team will also be in touch shortly to connect you with a doctor about your rash.</p>
-              <div style="margin-top:28px;padding-top:20px;border-top:1px solid #e8ecef;font-size:12px;color:#b0bec5">
-                TalkDoc · talkdoc26@gmail.com
-              </div>
-            </div>`,
+            subject: 'Your Free eBook: Common Skin Diseases',
+            htmlContent: `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:24px;background:#f2f2f2;font-family:Arial,Helvetica,sans-serif;">
+  <div style="max-width:520px;margin:0 auto;background:#fff;padding:24px;">
+    <p style="color:#222;font-size:14px;line-height:1.6;margin:0 0 12px;">Hi ${name.split(' ')[0]},</p>
+    <p style="color:#222;font-size:14px;line-height:1.6;margin:0 0 12px;">Thanks for reaching out to TalkDoc about your skin rash. As promised, here's your copy of our guide, Common Skin Diseases: A Home Guide — it covers symptoms, home care tips, and when to see a doctor for six common skin conditions.</p>
+    <p style="color:#222;font-size:14px;line-height:1.6;margin:0 0 12px;">You can download it here: <a href="${EBOOK_URL}" style="color:#008181;">${EBOOK_URL}</a></p>
+    <p style="color:#222;font-size:14px;line-height:1.6;margin:0 0 12px;">A member of our team will also be in touch shortly to connect you with a doctor about your rash.</p>
+    <p style="color:#222;font-size:14px;line-height:1.6;margin:0 0 12px;">Best,<br>TalkDoc</p>
+    <p style="color:#999;font-size:12px;margin-top:24px;">TalkDoc · talkdoc26@gmail.com</p>
+  </div>
+</body>
+</html>`,
           }),
         });
       } catch (e) { console.log('Could not send eBook email to lead:', e.message); }
