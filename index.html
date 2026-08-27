@@ -881,6 +881,7 @@ html{transition:background-color .35s ease;}
 <a href="#" onclick="scrollToSection('plans',event)">Pricing</a>
 <a href="#" onclick="scrollToSection('howit',event)">How It Works</a>
 <a href="#" onclick="scrollToSection('team',event)">Our Team</a>
+<a href="/blog" onclick="event.preventDefault();goToBlogListing()">Blog</a>
 <a href="#" onclick="openJoinTeamModal()">Join Our Team</a>
   </div>
   <div class="nav-right" style="display:flex;align-items:center;gap:14px;">
@@ -1144,6 +1145,25 @@ html{transition:background-color .35s ease;}
   </div>
   <div class="footer-bottom"><span>© 2026 TalkDoc. All rights reserved.</span><span style="display:inline-flex;align-items:center;gap:6px">Healthcare at your fingertips <svg class="ico"><use href="#icon-stethoscope"/></svg></span></div>
 </footer>
+</div>
+
+<!-- BLOG LISTING -->
+<div class="page" id="page-blog">
+  <nav class="navbar" id="mainNavBlog" style="position:relative"><div class="nav-container"><a href="/" onclick="event.preventDefault();showPage('landing')" class="logo"><svg class="ico" style="width:28px;height:28px;color:var(--primary)"><use href="#icon-stethoscope"/></svg> TalkDoc</a><div class="nav-links"><a href="/" onclick="event.preventDefault();showPage('landing')">Home</a><a href="/blog" class="active">Blog</a><a href="#" onclick="event.preventDefault();openModal('login')">Login</a><button class="btn btn-primary btn-sm" onclick="openModal('register')">Get Started</button></div></div></nav>
+  <div style="max-width:1000px;margin:0 auto;padding:60px 5% 100px">
+    <div style="text-align:center;margin-bottom:48px"><h1 style="font-size:clamp(2rem,4vw,2.8rem);font-weight:800;margin-bottom:10px">TalkDoc Blog</h1><p style="color:var(--text2);font-size:16px">Health tips, guides, and updates from our team of doctors</p></div>
+    <div id="blogListingGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px"><div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text2)">Loading posts…</div></div>
+  </div>
+  <footer class="footer"><div class="footer-bottom"><span>© 2026 TalkDoc. All rights reserved.</span></div></footer>
+</div>
+
+<!-- BLOG SINGLE POST -->
+<div class="page" id="page-blog-post">
+  <nav class="navbar" id="mainNavBlogPost" style="position:relative"><div class="nav-container"><a href="/" onclick="event.preventDefault();showPage('landing')" class="logo"><svg class="ico" style="width:28px;height:28px;color:var(--primary)"><use href="#icon-stethoscope"/></svg> TalkDoc</a><div class="nav-links"><a href="/" onclick="event.preventDefault();showPage('landing')">Home</a><a href="/blog" onclick="event.preventDefault();goToBlogListing()">Blog</a><a href="#" onclick="event.preventDefault();openModal('login')">Login</a><button class="btn btn-primary btn-sm" onclick="openModal('register')">Get Started</button></div></div></nav>
+  <div style="max-width:760px;margin:0 auto;padding:50px 5% 100px" id="blogPostContainer">
+    <div style="text-align:center;padding:60px;color:var(--text2)">Loading…</div>
+  </div>
+  <footer class="footer"><div class="footer-bottom"><span>© 2026 TalkDoc. All rights reserved.</span></div></footer>
 </div>
 
 <!-- PATIENT DASHBOARD -->
@@ -1435,6 +1455,7 @@ html{transition:background-color .35s ease;}
 <a href="#" onclick="showDashSection('admin','staffteam')"><span class="icon"><svg class="ico"><use href="#icon-users"/></svg></span> Team Members</a>
 <a href="#" onclick="showDashSection('admin','specialistbookings')"><span class="icon"><svg class="ico"><use href="#icon-scalpel"/></svg></span> Specialist Bookings</a>
 <a href="#" onclick="showDashSection('admin','community')"><span class="icon"><svg class="ico"><use href="#icon-users"/></svg></span> Community Groups</a>
+<a href="#" onclick="showDashSection('admin','blog')"><span class="icon"><svg class="ico"><use href="#icon-pencil"/></svg></span> Blog</a>
 <a href="#" onclick="logout()" class="logout-btn"><span class="icon"><svg class="ico"><use href="#icon-logout"/></svg></span> Logout</a>
 </div>
   </div>
@@ -1613,12 +1634,34 @@ html{transition:background-color .35s ease;}
 <div id="adminCommunityGroupsList" class="community-groups-grid"><div style="padding:28px;color:var(--text2)">Loading groups…</div></div>
 </div>
 
+<div class="dash-section" id="admin-blog">
+<div class="dash-header"><h1 style="display:flex;align-items:center;gap:10px"><svg class="ico" style="stroke-width:1.5"><use href="#icon-pencil"/></svg> Blog</h1><p>Write and publish articles — published posts appear on your public Blog page at talkdoc.ng/blog</p></div>
+<div style="margin-bottom:16px"><button class="btn btn-primary" onclick="openBlogEditor()"><svg class="ico"><use href="#icon-pencil"/></svg> New Post</button></div>
+<div class="card"><table class="table"><thead><tr><th>Title</th><th>Status</th><th>Last Updated</th><th>Actions</th></tr></thead><tbody id="adminBlogTable"><tr><td colspan="4" style="color:var(--text2);text-align:center;padding:20px">Loading…</td></tr></tbody></table></div>
+</div>
+
 </div>
   </div>
 </div>
 </div>
 
 <!-- MODALS -->
+<div class="modal-overlay hidden" id="modal-blogEditor"><div class="modal" style="max-width:660px">
+  <span class="modal-close" onclick="closeModal('blogEditor')">×</span>
+  <h2 id="blogEditorTitle">New Blog Post</h2>
+  <p class="subtitle">Published posts appear immediately on your public Blog page</p>
+  <div id="blogEditorAlert"></div>
+  <div class="form-group"><label>Title</label><input id="blogTitle" type="text" placeholder="e.g. 5 Signs You Should See a Doctor Today" oninput="autoSlugifyBlogTitle()"></div>
+  <div class="form-group"><label>URL Slug</label><input id="blogSlug" type="text" placeholder="5-signs-you-should-see-a-doctor"><div style="font-size:12px;color:var(--text2);margin-top:4px">Will appear at talkdoc.ng/blog/<span id="blogSlugPreview"></span></div></div>
+  <div class="form-group"><label>Cover Image URL (optional)</label><input id="blogCoverUrl" type="text" placeholder="https://images.pexels.com/..."></div>
+  <div class="form-group"><label>Excerpt <span style="font-weight:400;color:var(--text2)">— short summary shown on the blog list</span></label><textarea id="blogExcerpt" style="min-height:60px" placeholder="A one or two sentence summary of the post..."></textarea></div>
+  <div class="form-group"><label>Content <span style="font-weight:400;color:var(--text2)">— leave a blank line between paragraphs</span></label><textarea id="blogContent" style="min-height:240px" placeholder="Write your post here..."></textarea></div>
+  <input type="hidden" id="blogPostId">
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-outline" style="flex:1;min-width:140px" onclick="saveBlogPost('draft')">Save as Draft</button>
+    <button class="btn btn-primary" style="flex:1;min-width:140px" onclick="saveBlogPost('published')">Publish</button>
+  </div>
+</div></div>
 <div class="modal-overlay hidden" id="modal-login"><div class="modal"><span class="modal-close" onclick="closeModal('login')">×</span><h2>Welcome Back 👋</h2><p class="subtitle">Login to your TalkDoc account</p><div id="loginAlert"></div><div class="form-group"><label>Email or Phone</label><input id="loginEmail" type="text" placeholder="Enter email or phone" autocomplete="off"></div><div class="form-group"><label>Password</label><div class="pw-wrap"><input id="loginPassword" type="password" placeholder="Enter password" autocomplete="off"><button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Show password"><svg class="ico"><use href="#icon-eye"/></svg></button></div></div><div style="text-align:right;margin-top:-10px;margin-bottom:4px"><a style="color:var(--primary);cursor:pointer;font-size:13px;font-weight:600" onclick="openForgotPassword()">Forgot password?</a></div><div class="form-group" style="display:flex;align-items:center;gap:8px;margin-top:-4px"><input type="checkbox" id="rememberMe" style="width:auto;accent-color:var(--primary)"><label for="rememberMe" style="margin:0;font-size:13px;font-weight:500;color:var(--text2)">Remember me on this device</label></div><button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="doLogin()">Login →</button><div class="auth-switch">No account? <a onclick="switchModal('login','register')">Register here</a></div></div></div>
 
 <div class="modal-overlay hidden" id="modal-register"><div class="modal"><span class="modal-close" onclick="closeModal('register')">×</span><h2>Create Account 🎉</h2><p class="subtitle">Sign up to start your healthcare journey</p><div id="registerAlert"></div><div class="form-group"><label>Full Name</label><input id="regName" type="text" placeholder="Your full name"></div><div class="form-group"><label>Email Address</label><input id="regEmail" type="email" placeholder="Enter email"></div><div class="form-group"><label>Phone Number</label><input id="regPhone" type="tel" placeholder="08012345678"></div><div class="form-group"><label>Password</label><div class="pw-wrap"><input id="regPassword" type="password" placeholder="Create password"><button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Show password"><svg class="ico"><use href="#icon-eye"/></svg></button></div></div><div class="form-group" style="display:flex;align-items:flex-start;gap:8px;margin-top:-4px"><input type="checkbox" id="regAgreeTerms" style="width:auto;margin-top:3px;accent-color:var(--primary)"><label for="regAgreeTerms" style="margin:0;font-size:13px;font-weight:500;color:var(--text2);line-height:1.5">I agree to TalkDoc's <a onclick="event.preventDefault();viewPolicyDuringSignup('privacy')" style="color:var(--primary);cursor:pointer;font-weight:600">Privacy Policy</a> and <a onclick="event.preventDefault();viewPolicyDuringSignup('terms')" style="color:var(--primary);cursor:pointer;font-weight:600">Terms &amp; Conditions</a></label></div><button class="btn btn-primary" style="width:100%" onclick="doRegister()">Create Account →</button><div class="auth-switch">Already registered? <a onclick="switchModal('register','login')">Login here</a></div></div></div>
@@ -1908,7 +1951,7 @@ function showDashSection(role,section){
       if(drCard) drCard.classList.add('hidden');
       if(cForm) cForm.classList.add('hidden');
       if(qb) qb.classList.add('hidden');
-    },history:lPHist,subscription:lSub,messages:lPMsg,community:lPCommunity,profile:lPProf},doctor:{home:lDH,patients:lDPat,messages:lDMsg,consultations:lDC,community:lPCommunity,earnings:lDrEarnings,profile:lDProf},admin:{overview:lAO,patients:lAP,doctors:lAD,tracking:lAdminTracking,payments:lAPay,doctorApps:lAdminApplications,queue:lAdminQueue,newsletter:lAdminNewsletter,affiliations:lAdminAffiliations,staffteam:lAdminStaffTeam,specialistbookings:lAdminSpecialistBookings,community:lAdminCommunity}};
+    },history:lPHist,subscription:lSub,messages:lPMsg,community:lPCommunity,profile:lPProf},doctor:{home:lDH,patients:lDPat,messages:lDMsg,consultations:lDC,community:lPCommunity,earnings:lDrEarnings,profile:lDProf},admin:{overview:lAO,patients:lAP,doctors:lAD,tracking:lAdminTracking,payments:lAPay,doctorApps:lAdminApplications,queue:lAdminQueue,newsletter:lAdminNewsletter,affiliations:lAdminAffiliations,staffteam:lAdminStaffTeam,specialistbookings:lAdminSpecialistBookings,community:lAdminCommunity,blog:lAdminBlog}};
   L[role]?.[section]?.();
 }
 function openModal(n){document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden'));document.getElementById('modal-'+n)?.classList.remove('hidden');if(n==='login')prefillRememberedLogin();
@@ -2134,6 +2177,22 @@ function renderTeamSection(){
   }).join('') : '<p style="color:var(--text2)">Doctors coming soon</p>';
   el.innerHTML = cardsHtml;
 }
+// Some browsers (mobile Safari/Chrome especially) restore a frozen snapshot
+// of the page — including any open modal and its error text — instead of
+// truly re-running everything fresh, when navigating back/forward or via
+// certain reload gestures. This is the browser's "back-forward cache"
+// (bfcache). Without this, a login error like "Invalid password" can appear
+// to persist across a reload, when really the browser just brought back the
+// exact DOM state that was showing before, untouched. `event.persisted`
+// is true specifically when this happened, so we use it to force every modal
+// closed and every inline alert cleared, matching what a genuine fresh load
+// would show.
+window.addEventListener('pageshow',(event)=>{
+  if(!event.persisted) return;
+  document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden'));
+  document.querySelectorAll('#addDrAlert,#adminLoginAlert,#affilAdminAlert,#confirmBookingAlert,#createGroupAlert,#doctorPwAlert,#drRegAlert,#forgotAlert,#loginAlert,#medHistAlert,#patientPwAlert,#payAlert,#registerAlert,#specAlert,#staffAdminAlert').forEach(el=>{ if(el) el.innerHTML=''; });
+});
+
 window.addEventListener('load',()=>{
   updateNavState();
   /* Intentionally NOT auto-opening a returning user's dashboard here — the site always lands on the public homepage first, even for a remembered/logged-in session, so private medical/consultation data is never shown just because a browser was reopened. Logged-in users see a "My Dashboard" button in the nav (see goToMyDashboard()) to go there deliberately. */
@@ -2152,12 +2211,16 @@ window.addEventListener('load',()=>{
     if(path==='/login'){ openModal('login'); }
     else if(path==='/signup'||path==='/register'){ openModal('register'); }
     else if(path==='/dashboard'){ history.replaceState({},'','/login'); openModal('login'); }
+    else if(path==='/blog'){ showPage('blog'); loadBlogListing(); }
+    else if(path.startsWith('/blog/')){ showPage('blog-post'); loadSingleBlogPost(decodeURIComponent(path.slice('/blog/'.length))); }
   })();
   window.addEventListener('popstate',()=>{
     const path=window.location.pathname;
     if(path==='/login'){ openModal('login'); }
     else if(path==='/signup'||path==='/register'){ openModal('register'); }
-    else if(path==='/'){ document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden')); }
+    else if(path==='/'){ document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden')); showPage('landing'); }
+    else if(path==='/blog'){ document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden')); showPage('blog'); loadBlogListing(); }
+    else if(path.startsWith('/blog/')){ document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.add('hidden')); showPage('blog-post'); loadSingleBlogPost(decodeURIComponent(path.slice('/blog/'.length))); }
   });
   setTimeout(initReveal,350); // fires immediately, independent of any network calls below — the hero fade-in should never wait on data fetches unrelated to it
   const sv2=document.getElementById('severity');if(sv2)sv2.addEventListener('input',()=>document.getElementById('severityVal').textContent=sv2.value);
@@ -3753,6 +3816,162 @@ async function lAdminCommunity(){
     +'</div>'
   ).join('');
 }
+// ============ BLOG ============
+// Turns a title into a clean URL slug, e.g. "5 Signs You Should See A Doctor!"
+// -> "5-signs-you-should-see-a-doctor"
+function slugify(text){
+  return (text||'').toLowerCase().trim()
+    .replace(/[^a-z0-9\s-]/g,'')
+    .replace(/\s+/g,'-')
+    .replace(/-+/g,'-')
+    .replace(/^-|-$/g,'');
+}
+let _blogSlugManuallyEdited=false;
+function autoSlugifyBlogTitle(){
+  if(_blogSlugManuallyEdited) return;
+  const slug=slugify(document.getElementById('blogTitle').value);
+  document.getElementById('blogSlug').value=slug;
+  document.getElementById('blogSlugPreview').textContent=slug;
+}
+(function(){
+  document.addEventListener('input',(e)=>{
+    if(e.target && e.target.id==='blogSlug'){
+      _blogSlugManuallyEdited=true;
+      document.getElementById('blogSlugPreview').textContent=slugify(e.target.value);
+    }
+  });
+})();
+
+// Turns a block of plain text (blank line = new paragraph) into safe HTML —
+// used for both the admin preview save and public rendering, since posts are
+// written as plain text, not a rich-text editor.
+function renderBlogContentHtml(raw){
+  return (raw||'').split(/\n\s*\n/).map(p=>'<p>'+escapeHtml(p.trim()).replace(/\n/g,'<br>')+'</p>').join('');
+}
+
+function openBlogEditor(post){
+  document.getElementById('blogEditorTitle').textContent=post?'Edit Blog Post':'New Blog Post';
+  document.getElementById('blogEditorAlert').innerHTML='';
+  document.getElementById('blogPostId').value=post?post.id:'';
+  document.getElementById('blogTitle').value=post?post.title:'';
+  document.getElementById('blogSlug').value=post?post.slug:'';
+  document.getElementById('blogSlugPreview').textContent=post?post.slug:'';
+  document.getElementById('blogCoverUrl').value=post?(post.cover_image_url||''):'';
+  document.getElementById('blogExcerpt').value=post?(post.excerpt||''):'';
+  document.getElementById('blogContent').value=post?post.content:'';
+  _blogSlugManuallyEdited=!!post; // don't auto-slugify over an existing post's slug while editing
+  openModal('blogEditor');
+}
+
+async function saveBlogPost(status){
+  const id=document.getElementById('blogPostId').value||null;
+  const title=document.getElementById('blogTitle').value.trim();
+  const slug=slugify(document.getElementById('blogSlug').value)||slugify(title);
+  const coverUrl=document.getElementById('blogCoverUrl').value.trim();
+  const excerpt=document.getElementById('blogExcerpt').value.trim();
+  const content=document.getElementById('blogContent').value.trim();
+  if(!title||!content) return showAlert('blogEditorAlert','Please add a title and some content.');
+  if(!sbReady()){ showAlert('blogEditorAlert','Supabase is not configured.'); return; }
+  const payload={title,slug,cover_image_url:coverUrl||null,excerpt:excerpt||null,content,status,author_name:S.currentUser?.name||'TalkDoc Team'};
+  if(status==='published') payload.published_at=new Date().toISOString();
+  try{
+    let error;
+    if(id){ ({error}=await sb.from('blog_posts').update(payload).eq('id',id)); }
+    else{ ({error}=await sb.from('blog_posts').insert(payload)); }
+    if(error){
+      if(error.message?.includes('duplicate')||error.code==='23505') return showAlert('blogEditorAlert','That URL slug is already used by another post — please change it.');
+      return showAlert('blogEditorAlert','Could not save: '+error.message);
+    }
+    closeModal('blogEditor');
+    showSuccess(status==='published'?'Post Published! 🎉':'Draft Saved','Your post has been saved.','✅');
+    lAdminBlog();
+  }catch(e){ showAlert('blogEditorAlert','Could not save. Please try again.'); }
+}
+
+async function deleteBlogPostConfirm(id,title){
+  if(!confirm('Delete "'+title+'"? This cannot be undone.'))return;
+  if(!sbReady())return;
+  try{
+    const {error}=await sb.from('blog_posts').delete().eq('id',id);
+    if(error){ alert('Could not delete: '+error.message); return; }
+    lAdminBlog();
+  }catch(e){ alert('Could not delete. Please try again.'); }
+}
+
+async function lAdminBlog(){
+  const t=document.getElementById('adminBlogTable');
+  if(!sbReady()){ t.innerHTML='<tr><td colspan="4" style="color:var(--text2);text-align:center;padding:20px">Supabase not connected</td></tr>'; return; }
+  try{
+    const {data,error}=await sb.from('blog_posts').select('*').order('created_at',{ascending:false});
+    if(error) throw error;
+    if(!data||!data.length){ t.innerHTML='<tr><td colspan="4" style="color:var(--text2);text-align:center;padding:20px">No posts yet — click "New Post" to write your first one.</td></tr>'; return; }
+    t.innerHTML=data.map(p=>{
+      const statusBadge=p.status==='published'?'<span class="badge badge-success">Published</span>':'<span class="badge badge-warning">Draft</span>';
+      const postJson=escapeHtml(JSON.stringify(p)).replace(/'/g,"&#39;");
+      return '<tr><td>'+escapeHtml(p.title)+'</td><td>'+statusBadge+'</td><td>'+new Date(p.updated_at||p.created_at).toLocaleDateString('en-NG')+'</td>'
+        +'<td style="display:flex;gap:6px"><button class="btn btn-sm btn-outline" onclick=\'openBlogEditor('+postJson+')\'>Edit</button>'
+        +'<button class="btn btn-sm btn-danger" onclick="deleteBlogPostConfirm(\''+p.id+'\',\''+escapeHtml(p.title).replace(/'/g,"\\'")+'\')">Delete</button></td></tr>';
+    }).join('');
+  }catch(e){ t.innerHTML='<tr><td colspan="4" style="color:var(--text2);text-align:center;padding:20px">Could not load posts</td></tr>'; console.log('lAdminBlog error:',e); }
+}
+
+// ---- Public-facing blog pages ----
+function goToBlogListing(){
+  showPage('blog');
+  pushUrlPath('/blog');
+  loadBlogListing();
+}
+function goToBlogPostBySlug(slug,reveal){
+  showPage('blog-post');
+  if(reveal!==false) pushUrlPath('/blog/'+slug);
+  loadSingleBlogPost(slug);
+}
+
+async function loadBlogListing(){
+  const el=document.getElementById('blogListingGrid');
+  if(!sbReady()){ el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text2)">Could not load posts right now.</div>'; return; }
+  try{
+    const {data,error}=await sb.from('blog_posts').select('title,slug,excerpt,cover_image_url,author_name,published_at').eq('status','published').order('published_at',{ascending:false});
+    if(error) throw error;
+    if(!data||!data.length){ el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text2)">No posts yet — check back soon!</div>'; return; }
+    el.innerHTML=data.map(p=>
+      '<a href="/blog/'+p.slug+'" onclick="event.preventDefault();goToBlogPostBySlug(\''+p.slug+'\')" style="text-decoration:none;color:inherit;display:block;border:1px solid var(--border,#e8ecef);border-radius:var(--r);overflow:hidden;background:var(--card-bg,#fff)">'
+      +(p.cover_image_url?'<img src="'+escapeHtml(p.cover_image_url)+'" alt="" style="width:100%;height:170px;object-fit:cover;display:block">':'')
+      +'<div style="padding:20px"><div style="font-size:12px;color:var(--text2);margin-bottom:6px">'+new Date(p.published_at).toLocaleDateString('en-NG',{year:'numeric',month:'long',day:'numeric'})+'</div>'
+      +'<div style="font-weight:800;font-size:1.1rem;margin-bottom:8px;line-height:1.3">'+escapeHtml(p.title)+'</div>'
+      +(p.excerpt?'<div style="font-size:14px;color:var(--text2);line-height:1.6">'+escapeHtml(p.excerpt)+'</div>':'')
+      +'</div></a>'
+    ).join('');
+  }catch(e){ el.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text2)">Could not load posts right now.</div>'; console.log('loadBlogListing error:',e); }
+}
+
+async function loadSingleBlogPost(slug){
+  const el=document.getElementById('blogPostContainer');
+  el.innerHTML='<div style="text-align:center;padding:60px;color:var(--text2)">Loading…</div>';
+  if(!sbReady()){ el.innerHTML='<div style="text-align:center;padding:60px;color:var(--text2)">Could not load this post right now.</div>'; return; }
+  try{
+    const {data,error}=await sb.from('blog_posts').select('*').eq('slug',slug).eq('status','published').limit(1);
+    if(error) throw error;
+    const p=data && data[0];
+    if(!p){
+      el.innerHTML='<div style="text-align:center;padding:60px"><h2>Post Not Found</h2><p style="color:var(--text2);margin:12px 0 20px">This post may have been removed or unpublished.</p><a href="/blog" onclick="event.preventDefault();goToBlogListing()" class="btn btn-primary">← Back to Blog</a></div>';
+      document.title='Post Not Found — TalkDoc Blog';
+      return;
+    }
+    document.title=p.title+' — TalkDoc Blog';
+    let metaDesc=document.querySelector('meta[name="description"]');
+    const prevDesc=metaDesc?metaDesc.getAttribute('content'):null;
+    if(metaDesc && p.excerpt) metaDesc.setAttribute('content',p.excerpt);
+    el.innerHTML='<a href="/blog" onclick="event.preventDefault();goToBlogListing()" style="color:var(--primary);font-weight:600;font-size:14px;text-decoration:none;display:inline-block;margin-bottom:20px">← Back to Blog</a>'
+      +(p.cover_image_url?'<img src="'+escapeHtml(p.cover_image_url)+'" alt="" style="width:100%;max-height:360px;object-fit:cover;border-radius:var(--r);margin-bottom:24px">':'')
+      +'<h1 style="font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;line-height:1.25;margin-bottom:10px">'+escapeHtml(p.title)+'</h1>'
+      +'<div style="font-size:13px;color:var(--text2);margin-bottom:28px">By '+escapeHtml(p.author_name||'TalkDoc Team')+' · '+new Date(p.published_at).toLocaleDateString('en-NG',{year:'numeric',month:'long',day:'numeric'})+'</div>'
+      +'<div style="font-size:16px;line-height:1.85;color:var(--text)">'+renderBlogContentHtml(p.content)+'</div>';
+    // Restore the site's default meta description once they navigate elsewhere, so it doesn't leak into other pages
+    window.addEventListener('popstate',()=>{ if(metaDesc && prevDesc) metaDesc.setAttribute('content',prevDesc); },{once:true});
+  }catch(e){ el.innerHTML='<div style="text-align:center;padding:60px;color:var(--text2)">Could not load this post right now.</div>'; console.log('loadSingleBlogPost error:',e); }
+}
+
 async function adminCreateGroup(){
   const name=document.getElementById('grpName').value.trim();
   const description=document.getElementById('grpDescription').value.trim();
