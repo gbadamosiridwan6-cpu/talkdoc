@@ -30,7 +30,7 @@ body{
     #f7fbfc;
 }
 .wrap{width:100%;max-width:980px;}
-.logo{display:block;height:288px;margin:0 auto 32px;}
+.logo{display:block;height:140px;margin:0 auto 32px;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:stretch;}
 @media(max-width:800px){
   .grid{grid-template-columns:1fr;}
@@ -165,7 +165,11 @@ async function submitLead(e){
     }
     document.getElementById('formView').style.display='none';
     document.getElementById('thankYouView').style.display='block';
-    setTimeout(function(){ window.location.reload(); }, 5000);
+    if(data.alreadySubscribed){
+      document.querySelector('#thankYouView h2').textContent='You\'re Already on Our List!';
+      document.querySelector('#thankYouView p').textContent='We already have your details from a previous submission. A member of our team will be in touch — check your inbox (and spam folder) for your free eBook.';
+    }
+    setTimeout(function(){ window.location.reload(); }, 15000);
   }catch(err){
     msgEl.textContent='Could not submit right now. Please check your connection and try again.';
     msgEl.style.display='block';
