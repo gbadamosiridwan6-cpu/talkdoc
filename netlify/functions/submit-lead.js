@@ -67,6 +67,19 @@ exports.handler = async function (event) {
   }
 
   try {
+    // 0. Check if this email already submitted a lead before — if so, don't
+    // create a duplicate row or re-send the eBook/team emails again.
+    const existingRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/leads?email=eq.${encodeURIComponent(email)}&select=id&limit=1`,
+      { headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` } }
+    );
+    if (existingRes.ok) {
+      const existing = await existingRes.json();
+      if (existing.length) {
+        return { statusCode: 200, headers, body: JSON.stringify({ success: true, alreadySubscribed: true }) };
+      }
+    }
+
     // 1. Save the lead
     const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
       method: 'POST',
