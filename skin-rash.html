@@ -32,7 +32,12 @@ body{
 .wrap{width:100%;max-width:980px;}
 .logo{display:block;height:288px;margin:0 auto 32px;}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:stretch;}
-@media(max-width:800px){.grid{grid-template-columns:1fr;}}
+@media(max-width:800px){
+  .grid{grid-template-columns:1fr;}
+  .logo{height:80px;margin:0 auto 16px;}
+  .form-panel{order:-1;}
+  body{padding:20px 5%;}
+}
 .panel{
   border-radius:var(--r);
   padding:40px 36px;
@@ -161,6 +166,7 @@ async function submitLead(e){
     }
     document.getElementById('formView').style.display='none';
     document.getElementById('thankYouView').style.display='block';
+    setTimeout(function(){ window.location.reload(); }, 5000);
   }catch(err){
     msgEl.textContent='Could not submit right now. Please check your connection and try again.';
     msgEl.style.display='block';
